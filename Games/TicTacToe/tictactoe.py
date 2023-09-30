@@ -15,14 +15,16 @@ class tic_tac_toe:
                 moves.append(value)
         return moves
 
-    def state_modify(state,action,player):
+    def state_modify(self,state,action,player):
         row=action//3
         col=action%3
         s = np.copy(state)
         s[row,col]=player
-        return state
+        return s
 
     def check_terminal_state(self,state,action):
+        if action is None:
+            return False,0
         row=action//3
         col=action%3
         for player in [-1, 1]:
@@ -31,15 +33,15 @@ class tic_tac_toe:
                 or np.trace(state)==player*3 
                 or np.trace(np.fliplr(state))==player*3):
                 return True ,player
-            elif 0 not in state.reshape(-1):
-                return True,0
+        if 0 not in state.reshape(-1):
+            return True,0
         return False, 0
             
-    def change_player(player):
-        return - player
+    def change_player(self,player):
+        return -1 * player
     
     def change_perspective(self, state,player):
-        return state * player
+        return (state * player).astype(np.int32)
 
     def get_opponent_value(self, value):
-        return - value
+        return -1 * value

@@ -41,7 +41,7 @@ class tic_tac_toe:
         return -1 * player
     
     def change_perspective(self, state,player):
-        return state * player
+        return (state * player).astype(np.int32)
 
     def get_opponent_value(self, value):
         return -1 * value

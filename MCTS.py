@@ -4,7 +4,8 @@ import numpy as np
 
 args = {
     "NO_OF_SEARCHES" : 10000,
-    "ADVERSIRIAL" : True
+    "ADVERSIRIAL" : True,
+    "EXPLORATION_CONST" : 1.44
 }
 class Node:
     
@@ -21,7 +22,7 @@ class Node:
         self.value_sum = 0
         
     def fully_expanded(self):
-        return len(self.children) > 0 and self.expandable_moves == 0
+        return len(self.children) > 0 and len(self.expandable_moves) == 0
 
     def search(self):
         max_ucb_child = None
@@ -34,7 +35,7 @@ class Node:
         return max_ucb_child
         
     def expand(self):
-        print(self.expandable_moves)
+
         action = np.random.choice(self.expandable_moves)
         self.expandable_moves.remove(action)
         child = self.game.state_modify(self.state, action, 1)
@@ -73,8 +74,8 @@ class Node:
     def check_ucb(self,state):
         q_value = ((state.value_sum / state.visit_count) + 1) / 2
 
-        if self.args['Adversirial']:
-            q_value = 1 - q_value + self.args['exploration_const'] * math.sqrt((math.log(self.visit_count) / state.visit_count))
+        if self.args['ADVERSIRIAL']:
+            q_value = 1 - q_value + self.args['EXPLORATION_CONST'] * math.sqrt((math.log(self.visit_count) / state.visit_count))
         
         return q_value 
         
@@ -92,7 +93,7 @@ class MCTS:
             node = root
             # select
             while node.fully_expanded():
-                node = node.search(node)
+                node = node.search()
             
             is_terminal, value = self.game.check_terminal_state(node.state, node.action)
             if not is_terminal:
@@ -105,9 +106,9 @@ class MCTS:
         
         action_prob = np.zeros(self.game.action_space)
         for child in root.children:
-            # print(len(root.children))
             action_prob[child.action] = child.visit_count
         action_prob /= np.sum(action_prob)
+        return action_prob
 
 
 t = tic_tac_toe()
@@ -116,4 +117,4 @@ print(state)
 root = Node(t, args, state)
 mcts = MCTS(t, args)
 out = mcts.search(root)
-print(root.children[0].children[0].state)
+print(out)
