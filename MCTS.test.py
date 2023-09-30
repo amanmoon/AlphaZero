@@ -72,6 +72,7 @@ class Node:
                 return value
             if self.args['adversirial']:
                 rollout_player = self.game.change_player(rollout_player)
+                
     def backpropagate(self, value):
         self.value_sum += value
         self.visit_count += 1
@@ -96,8 +97,8 @@ class MCTS:
             while node.fully_expanded():
                 node = node.select()             
             is_terminal, value = self.game.check_terminal_state(node, node.action)
-            if not is_terminal :    
-                value = self.game.get_opponent_value(value) 
+            if not is_terminal :
+                value = self.game.get_opponent_value(value)
             # expansion
             if not is_terminal:
                 node = node.expand()
