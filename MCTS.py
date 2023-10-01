@@ -1,14 +1,13 @@
-from tictactoe import tic_tac_toe 
+import numpy as np 
 import math
-import numpy as np
+from tictactoe import TicTacToe
 
 args = {
-    "NO_OF_SEARCHES" : 10000,
-    "ADVERSIRIAL" : True,
-    "EXPLORATION_CONST" : 1.44
+    "NO_OF_SEARCHES" : 100000,
+    "EXPLORATION_CONSTANT" : 1.42
 }
+
 class Node:
-    
     def __init__(self, game, args, state, parent = None, action = None):
         self.game = game
         self.args = args
@@ -16,105 +15,97 @@ class Node:
         self.parent = parent
         self.action = action
         
-        self.children = list()  # children in tree
-        self.expandable_moves = self.game.valid_moves(state)
-        self.visit_count = 0
-        self.value_sum = 0
+        self.children = list()
+        self.expandable_moves = self.game.get_moves(self.state)
+        self.visits = 0
+        self.wins = 0
         
-    def fully_expanded(self):
-        return len(self.children) > 0 and len(self.expandable_moves) == 0
-
+    def leaf_or_not(self):
+        return (len(self.children) > 0 and len(self.expandable_moves) == 0)
+        
     def search(self):
-        max_ucb_child = None
-        max_ucb = - np.inf
+        best_child = None
+        best_ucb = - np.inf
         for child in self.children:
-            ucb = self.check_ucb(child)
-            if ucb > max_ucb:
-                max_ucb = ucb
-                max_ucb_child = child
-        return max_ucb_child
-        
-    def expand(self):
+            ucb = self.get_ucb(child)
+            if best_ucb < ucb:
+                best_ucb = ucb 
+                best_child = child
+        return best_child
 
-        action = np.random.choice(self.expandable_moves)
-        self.expandable_moves.remove(action)
-        child = self.game.state_modify(self.state, action, 1)
-
-        if self.args['ADVERSIRIAL']:
-            child = self.game.change_perspective(child, -1)
-        
-        child = Node(self.game, self.args, child, self, action)
+    def get_ucb(self, child):
+        q_value = 1 - ((child.wins / child.visits) + 1) / 2
+        return q_value + self.args["EXPLORATION_CONSTANT"] * math.sqrt(math.log(self.visits) / child.visits)
+    
+    def expand(self, player):
+        rand_move = np.random.choice(self.expandable_moves)
+        self.expandable_moves.remove(rand_move)
+        child = self.game.make_move(self.state, rand_move, player)
+        child = self.game.change_perspective(child)
+        child = Node(self.game, self.args, child, self, rand_move)
         self.children.append(child)
-        
         return child
+    
+    def simulate(self, player):
+        is_terminal, value = self.game.know_terminal_value(self.state, self.action, -1 * player)
         
-    def simulate(self):
-        is_terminal, value = self.game.check_terminal_state(self.state, self.action)
-
         if is_terminal:
             return value
-        rollout = self.state.copy()
-        player = 1 # as we are changing state to current player perspective the player will always be 1
+        state = self.state.copy()
         while True:
-            action = np.random.choice(self.game.valid_moves(rollout))
-            rollout = self.game.state_modify(rollout, action, player)
-            is_terminal, value = self.game.check_terminal_state(rollout, action)
+            possible_moves = self.game.get_moves(state)
+            rand_move = np.random.choice(possible_moves)
+            state = self.game.make_move(state, rand_move, player)
+            is_terminal, value = self.game.know_terminal_value(state, rand_move,player)
             if is_terminal:
                 return value
-            player = self.game.change_player(player)
-            
-    def backpropagate(self, value):
-        self.visit_count += 1
-        self.value_sum += value
+            possible_moves = self.game.get_moves(state)
+            rand_move = np.random.choice(possible_moves)
+            player = self.game.get_opponent(player)
         
-        value = self.game.get_opponent_value(value)
+    def backpropagate(self,value):
+        self.wins += value
+        self.visits += 1
         if self.parent is not None:
             self.parent.backpropagate(value)
-    
-    def check_ucb(self,state):
-        q_value = ((state.value_sum / state.visit_count) + 1) / 2
-
-        if self.args['ADVERSIRIAL']:
-            q_value = 1 - q_value + self.args['EXPLORATION_CONST'] * math.sqrt((math.log(self.visit_count) / state.visit_count))
-        
-        return q_value 
-        
-        
+            
 class MCTS:
-    
     def __init__(self, game, args):
         self.game = game
         self.args = args
-    
-    def search(self, root):
-        node = root
         
-        for _ in range(self.args['NO_OF_SEARCHES']):
+    def search(self, node):
+        root = Node(self.game, self.args, node)
+
+        for _ in range(self.args["NO_OF_SEARCHES"]):
             node = root
-            # select
-            while node.fully_expanded():
+            player = 1
+            while node.leaf_or_not():
                 node = node.search()
-            
-            is_terminal, value = self.game.check_terminal_state(node.state, node.action)
+                player = self.game.get_opponent(player)
+                
+            is_terminal, value = self.game.know_terminal_value(node.state, node.action, player)
             if not is_terminal:
-                # expand
-                node = node.expand()
-                # simulate
-                value = node.simulate()
-            # backpropagation
+                node = node.expand(player)
+                value = node.simulate(player)
             node.backpropagate(value)
-        
-        action_prob = np.zeros(self.game.action_space)
-        for child in root.children:
-            action_prob[child.action] = child.visit_count
-        action_prob /= np.sum(action_prob)
-        return action_prob
+            
+        move_probability = np.zeros(self.game.possible_state)
+        for children in root.children:
+            move_probability[children.action] = children.visits
+        move_probability /= np.sum(move_probability)
 
-
-t = tic_tac_toe()
-state = t.initialise_state()
-print(state)
-root = Node(t, args, state)
-mcts = MCTS(t, args)
-out = mcts.search(root)
-print(out)
+        return move_probability
+ 
+game = TicTacToe()
+state = game.initialise_state()
+mcts = MCTS(game, args)
+out = mcts.search(state)
+# print(out)
+while True:
+    out = mcts.search(state)
+    is_terminal ,value = game.know_terminal_value(state, out.argmax(), -1)
+    state = game.make_move(state,out.argmax(),-1)
+    print(state)
+    move = int(input("enter move:"))
+    state = game.make_move(state, move,1)
