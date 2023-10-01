@@ -46,8 +46,15 @@ class TicTacToe:
 
         return state_copy
     
+    def get_encoded_state(self, state):
+        encoded_state = np.stack(
+            (state == -1, state == 0, state == 1)
+        ).astype(np.float32)
+        return encoded_state
+                        
     def get_opponent(self, player):
         return -1 * player
     
     def change_perspective(self, state):
         return (-1 * state).astype(np.int8)
+    

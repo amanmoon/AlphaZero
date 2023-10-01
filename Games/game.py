@@ -24,6 +24,12 @@ class GAME:
         action is taken on given state and output is the final state"""
     
     def get_opponent(self, player):
-        """NOTE: takin the input of current player this should change the 
+        """NOTE: taking the input of current player this should change the 
         player to the opponent"""
+        pass
+    
+    def change_perspective(self, state):
+        """NOTE: input state should change perspective of board
+        ie. if player 1 is playing it should change to player -1 
+        simply by multiplying by =1"""
         pass
