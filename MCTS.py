@@ -1,14 +1,5 @@
-import sys
-sys.path.insert(0,'/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/TicTacToe')
-from tictactoe import TicTacToe
 import numpy as np 
 import math
-
-args = {
-    
-    "NO_OF_SEARCHES" : 1000,
-    "EXPLORATION_CONSTANT" : 1.41
-}
 
 class Node:
     def __init__(self, game, args, state, parent = None, action = None):
@@ -110,18 +101,3 @@ class MCTS:
 
         return move_probability
  
-game = TicTacToe()
-state = game.initialise_state()
-mcts = MCTS(game, args)
-out = mcts.search(state)
-print(out)
-while True:
-    print(state)
-    move = int(input("enter move:"))
-    state = game.make_move(state, move,1)
-    state = game.change_perspective(state)
-    out = mcts.search(state)
-    
-    is_terminal ,value = game.know_terminal_value(state, out.argmax())
-    state = game.make_move(state,out.argmax(),1)
-    state = game.change_perspective(state)

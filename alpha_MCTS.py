@@ -1,16 +1,7 @@
 import sys
-sys.path.insert(0,'/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/TicTacToe')
-from tictactoe import TicTacToe
-sys.path.insert(0,'/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/TicTacToe')
-import tictactoeNN as nn
 import numpy as np 
 import math
 import torch
-
-args = {
-    "NO_OF_SEARCHES" : 1000,
-    "EXPLORATION_CONSTANT" : 1.42
-}
 
 class Node:
     def __init__(self, game, args, state, parent = None, action = None, prob = 0):
@@ -103,21 +94,3 @@ class MCTS:
         move_probability /= np.sum(move_probability)
 
         return move_probability
- 
- 
-game = TicTacToe()
-state = game.initialise_state()
-model = nn.Resnet(game, 4, 64)
-mcts = MCTS(game, args, model)
-
-out = mcts.search(state)
-# print(out)
-while True:
-    print(state)
-    move = int(input("enter move:"))
-    state = game.make_move(state, move,1)
-    state = game.change_perspective(state)    
-    out = mcts.search(state)
-    is_terminal ,value = game.know_terminal_value(state, out.argmax())
-    state = game.make_move(state,out.argmax(),1)
-    state = game.change_perspective(state)

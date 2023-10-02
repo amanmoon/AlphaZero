@@ -1,3 +1,15 @@
+args = {
+    "GAME" : "TicTacToe",
+    "NO_OF_SEARCHES" : 1000,
+    "EXPLORATION_CONSTANT" : 1.42,
+    "NO_ITERATIONS" : 1000,
+    "SELF_PLAY_ITERATIONS" : 1000,
+    "EPOCHS" : 10,
+    "BATCH_SIZE" : 5,
+    "MODEL_CHECK_GAMES" : 10
+}
+
+
 import numpy as np
 import random
 
@@ -8,15 +20,24 @@ import torch.nn.functional as F
 import tqdm 
 import copy
 
-args = {
-    "NO_OF_SEARCHES" : 1000,
-    "EXPLORATION_CONSTANT" : 1.42,
-    "NO_ITERATIONS" : 1000,
-    "SELF_PLAY_ITERATIONS" : 1000,
-    "EPOCHS" : 10,
-    "BATCH_SIZE" : 5,
-    "MODEL_CHECK_GAMES" : 10
-}
+
+import importlib.util
+game = args["GAME"]
+module_path = f"/Games/{game}"
+module_game = f"{game}"
+module_NN = f"{game}NN"
+
+spec_game = importlib.util.spec_from_file_location(module_game, module_path)
+spec_NN = importlib.util.spec_from_file_location(module_NN,module_path)
+
+module_game = importlib.util.module_from_spec(spec_game)
+module_NN = importlib.util.module_from_spec(spec_NN)
+spec_game.loader.exec_module(module_game)
+spec_NN.loader.exec_module(module_NN)
+
+
+
+
 
 class Alpha_Zero:
     def __init__(self, game, args, model, optimizer):

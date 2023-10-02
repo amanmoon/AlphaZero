@@ -1,9 +1,7 @@
-
-import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from tictactoe import TicTacToe
+from Games.TicTacToe.TicTacToe import TicTacToe
 
 class Resnet(nn.Module):
     
@@ -59,15 +57,3 @@ class ResBlock(nn.Module):
         x += residual
         x = F.relu(x)
         return x
-
-# t = TicTacToe()
-# state = t.initialise_state()
-# state = t.make_move(state, 5, 1)
-# print(state)
-# tensor_state = torch.tensor(t.get_encoded_state(state)).unsqueeze(0) 
-# print(tensor_state)
-# model = Resnet(t, 4, 64)
-# policy, value = model(tensor_state)
-# value = value.item()
-# policy = torch.softmax(policy, axis = 1).squeeze(0).detach().cpu().numpy()
-# print(policy,"\n",value)
