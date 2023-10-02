@@ -47,17 +47,19 @@ class Node:
         return q_value + self.args['EXPLORATION_CONSTANT'] * (math.sqrt(self.visits) / (child.visits + 1)) * child.prob
     
     
-    def expand(self, player, policy):
+    def expand(self, policy):
         for move, prob in enumerate(policy):
-                
-            child = self.game.make_move(self.state, move, player)
-            child = self.game.change_perspective(child)
-            child = Node(self.game, self.args, child, self, move, prob)
-            self.children.append(child)
+            if prob > 0:
+                child = self.game.make_move(self.state.copy(), move, 1)
+                child = self.game.change_perspective(child)
+                child = Node(self.game, self.args, child, self, move, prob)
+                self.children.append(child)
 
     def backpropagate(self,value):
         self.value += value
         self.visits += 1
+        
+        value = self.game.get_opponent_value(value)
         if self.parent is not None:
             self.parent.backpropagate(value)
             
@@ -73,12 +75,13 @@ class MCTS:
 
         for _ in range(self.args["NO_OF_SEARCHES"]):
             node = root
-            player = 1
+                
             while node.leaf_or_not():
                 node = node.search()
-                player = self.game.get_opponent(player)
-                
-            is_terminal, value = self.game.know_terminal_value(node.state, node.action, player)
+              
+            is_terminal, value = self.game.know_terminal_value(node.state, node.action)
+            value = self.game.get_opponent_value(value)
+            
             if not is_terminal:
                 encoded_state = torch.tensor(self.game.get_encoded_state(node.state)).unsqueeze(0) 
                 policy, value = self.model(encoded_state)
@@ -91,7 +94,7 @@ class MCTS:
                 policy /= np.sum(policy)
                 value = value.item()
                 
-                node.expand(player, policy)
+                node.expand(policy)
             node.backpropagate(value)
             
         move_probability = np.zeros(self.game.possible_state)
@@ -108,11 +111,13 @@ model = nn.Resnet(game, 4, 64)
 mcts = MCTS(game, args, model)
 
 out = mcts.search(state)
-print(out)
+# print(out)
 while True:
     print(state)
     move = int(input("enter move:"))
     state = game.make_move(state, move,1)
+    state = game.change_perspective(state)    
     out = mcts.search(state)
-    is_terminal ,value = game.know_terminal_value(state, out.argmax(), -1)
-    state = game.make_move(state,out.argmax(),-1)
+    is_terminal ,value = game.know_terminal_value(state, out.argmax())
+    state = game.make_move(state,out.argmax(),1)
+    state = game.change_perspective(state)

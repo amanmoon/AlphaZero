@@ -5,7 +5,6 @@ class TicTacToe:
         self.col = 3
         self.row = 3
         self.possible_state = self.col * self.row 
-        pass
     
     def initialise_state(self):
         return np.zeros((self.col,self.row))
@@ -17,34 +16,32 @@ class TicTacToe:
                 moves.append(value)
         return moves
 
-    def know_terminal_value(self, state, action, player):
+    def know_terminal_value(self, state, action):
         
         if action is None:
             return False, 0
         
         row=action//3
         col=action%3
-        
+        player = state[row,col]
+
         if (sum(state[row,:])==player*3 
             or sum(state[:,col])==player*3
             or np.trace(state)==player*3 
             or np.trace(np.fliplr(state))==player*3):
-            if player == -1:
-                return True , 0
-            else:
                 return True, 1
         
-        elif 0 not in state.reshape(-1):
-            return True, 0.5
+        if 0 not in state.reshape(-1):
+            return True, 0
         else:
             return False,0       
+
     def make_move(self, state, action, player):
         row=action//3
         col=action%3
-        state_copy = state.copy()
-        state_copy[row,col]=player
+        state[row,col]=player
 
-        return state_copy
+        return state
     
     def get_encoded_state(self, state):
         encoded_state = np.stack(
@@ -54,6 +51,9 @@ class TicTacToe:
                         
     def get_opponent(self, player):
         return -1 * player
+    
+    def get_opponent_value(self, value):
+        return -1 * value
     
     def change_perspective(self, state):
         return (-1 * state).astype(np.int8)
