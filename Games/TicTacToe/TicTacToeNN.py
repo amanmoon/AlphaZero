@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
-from Games.TicTacToe.TicTacToe import TicTacToe
+
 
 class Resnet(nn.Module):
     

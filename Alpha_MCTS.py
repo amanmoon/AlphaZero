@@ -42,7 +42,7 @@ class Node:
         for move, prob in enumerate(policy):
             if prob > 0:
                 child = self.game.make_move(self.state.copy(), move, 1)
-                child = self.game.change_perspective(child)
+                child = self.game.change_perspective(child, -1)
                 child = Node(self.game, self.args, child, self, move, prob)
                 self.children.append(child)
 
@@ -54,7 +54,7 @@ class Node:
         if self.parent is not None:
             self.parent.backpropagate(value)
             
-class MCTS:
+class Alpha_MCTS:
     def __init__(self, game, args, model):
         self.game = game
         self.args = args
@@ -74,6 +74,7 @@ class MCTS:
             value = self.game.get_opponent_value(value)
             
             if not is_terminal:
+                
                 encoded_state = torch.tensor(self.game.get_encoded_state(node.state)).unsqueeze(0) 
                 policy, value = self.model(encoded_state)
                 policy = torch.softmax(policy, axis=1).squeeze(0).cpu().numpy()
