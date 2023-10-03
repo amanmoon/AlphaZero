@@ -39,6 +39,7 @@ class TicTacToe:
     def make_move(self, state, action, player):
         row=action//3
         col=action%3
+        
         state[row,col]=player
 
         return state
@@ -55,6 +56,6 @@ class TicTacToe:
     def get_opponent_value(self, value):
         return -1 * value
     
-    def change_perspective(self, state, player):
+    def change_perspective(self, state, player = -1):
         return (player * state).astype(np.int8)
     

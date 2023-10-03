@@ -40,7 +40,7 @@ class Resnet(nn.Module):
             x = resBlock(x)
         policy = self.policyHead(x)
         value = self.valueHead(x)
-        return policy, value
+        return policy, value.squeeze(1)
     
 class ResBlock(nn.Module):
     def __init__(self, num_hidden):
