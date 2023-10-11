@@ -1,4 +1,3 @@
-import sys
 import numpy as np 
 import math
 import torch
@@ -12,16 +11,16 @@ class Node:
         self.action = action
         self.prob = prob
         
-        self.children = list()
+        self.children = []
         self.visits = 0
         self.value = 0
         
     def leaf_or_not(self):
-        return (len(self.children) > 0)
+        return len(self.children) > 0
     
     def search(self):
         best_child = None
-        best_ucb = - np.inf
+        best_ucb = -np.inf
         for child in self.children:
             ucb = self.get_ucb(child)
             if best_ucb < ucb:
@@ -39,10 +38,13 @@ class Node:
     
     
     def expand(self, policy):
+        
         for move, prob in enumerate(policy):
             if prob > 0:
-                child = self.game.make_move(self.state.copy(), move, 1)
-                child = self.game.change_perspective(child, -1)
+                child = self.state.copy()
+                child = self.game.make_move(child, move, 1)
+                child = self.game.change_perspective(child, player = -1)
+
                 child = Node(self.game, self.args, child, self, move, prob)
                 self.children.append(child)
 
@@ -75,23 +77,25 @@ class Alpha_MCTS:
             
             if not is_terminal:
                 
-                encoded_state = torch.tensor(self.game.get_encoded_state(node.state)).unsqueeze(0) 
-                policy, value = self.model(encoded_state)
-                policy = torch.softmax(policy, axis=1).squeeze(0).cpu().numpy()
+                policy, value = self.model(
+                    torch.tensor(self.game.get_encoded_state(node.state)).unsqueeze(0)
+                )
 
-                valid_state = np.zeros(self.game.possible_state)
-                for move in self.game.get_moves(node.state):
-                    valid_state[move] = 1
+                valid_state = self.game.get_valid_moves(node.state)
+
                 policy *= valid_state
                 policy /= np.sum(policy)
+                
+                policy = torch.softmax(policy, axis=1).squeeze(0).cpu().numpy().astype(np.float128)
                 value = value.item()
                 
                 node.expand(policy)
+                
             node.backpropagate(value)
             
         move_probability = np.zeros(self.game.possible_state)
         for children in root.children:
             move_probability[children.action] = children.visits
         move_probability /= np.sum(move_probability)
-
+        print(move_probability)
         return move_probability

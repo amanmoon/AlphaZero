@@ -9,12 +9,9 @@ class TicTacToe:
     def initialise_state(self):
         return np.zeros((self.col,self.row))
         
-    def get_moves(self, state):
-        moves=list()
-        for value,player in enumerate(state.reshape(-1)):
-            if player==0:
-                moves.append(value)
-        return moves
+    def get_valid_moves(self, state):
+        return (state.reshape(-1) == 0).astype(np.uint8)
+    
 
     def know_terminal_value(self, state, action):
         
@@ -57,5 +54,5 @@ class TicTacToe:
         return -1 * value
     
     def change_perspective(self, state, player = -1):
-        return (player * state).astype(np.int8)
+        return (player * state).astype(np.float32)
     
