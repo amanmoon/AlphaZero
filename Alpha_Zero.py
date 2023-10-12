@@ -6,7 +6,7 @@ import torch
 import torch.nn.functional as F
 
 import tqdm 
-
+import copy
 
 
 class Alpha_Zero:
@@ -43,13 +43,14 @@ class Alpha_Zero:
                         return_action_prob, 
                         return_value
                     ))
-
                 return return_memory
                 
             player = self.game.get_opponent(player)
     
     def train(self, memory):
+        
         random.shuffle(memory)
+        total_loss = 0
         
         for batch_start in range(0, len(memory), self.args["BATCH_SIZE"]):
             batch_end = min(len(memory) - 1, batch_start + self.args["BATCH_SIZE"])    
@@ -69,11 +70,15 @@ class Alpha_Zero:
             value_loss = F.mse_loss(out_value, value_targets)
             loss = policy_loss + value_loss
             
+            total_loss += loss
+
             self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
 
-            return loss
+        avg_loss = total_loss / (batch_start / self.args["BATCH_SIZE"])
+        
+        return avg_loss
 
     def compare_models(self, initial_model):
         self.model.eval()
@@ -124,7 +129,7 @@ class Alpha_Zero:
         else:
             print("MODEL FOUND\nLOADING MODEL...")
         finally:
-            # initial_model = copy.copy(self.model)
+            initial_model = copy.copy(self.model)
             for iteration in range(self.args["NO_ITERATIONS"]):
                 memory = []
     
@@ -143,12 +148,12 @@ class Alpha_Zero:
                     loss= self.train(memory)
                 print("Loss: ", loss.squeeze(0).item())
                 
-            # print("Testing...")
-            # self.model.eval()
-            # initial_model.eval()
-            # self.model, wins, draws, defeats  = self.compare_models(initial_model)
-            # print("Testing Completed\nTrained Model Stats:")
-            # print("Wins: ", wins,"| Loss: ", defeats, "| Draw: ", draws)
+            print("Testing...")
+            self.model.eval()
+            initial_model.eval()
+            self.model, wins, draws, defeats  = self.compare_models(initial_model)
+            print("Testing Completed\nTrained Model Stats:")
+            print("Wins: ", wins,"| Loss: ", defeats, "| Draw: ", draws)
 
         print("Saving Model...")
         torch.save(self.model.state_dict(), self.args["PATH_FOR_SAVING"] + "model.pt")
