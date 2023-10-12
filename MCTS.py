@@ -1,7 +1,5 @@
 import numpy as np 
 import math
-from Games.TicTacToe.TicTacToe import TicTacToe
-from Games.TicTacToe.TicTacToeNN import ResNet 
 
 class Node:
     def __init__(self, game, args, state, parent = None, action = None):

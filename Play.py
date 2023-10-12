@@ -10,13 +10,19 @@ game = "TicTacToe"
 args = {
     "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/{game}/models_n_optimizers/",
 
-    "NO_OF_SEARCHES" : 1000,
-    "EXPLORATION_CONSTANT" : 1,
+    "TEMPERATURE" : 1,
+    "DIRICHLET_EPSILON" : 0.25,
+    "DIRICHLET_ALPHA" : 0.3,
+    "ROOT_POLICY_RANDOMNESS" : False,
+    "NO_OF_SEARCHES" : 2,
+    "EXPLORATION_CONSTANT" : 2,
 }
 
 
 tictactoe = TicTacToe()
-model = ResNet(tictactoe, 4, 64)
+device = torch.device("cuda" if torch.cuda.is_available else "cpu")
+
+model = ResNet(tictactoe, 4, 64, device)
 model.eval()
 
 path = args["MODEL_PATH"] + "model.pt"

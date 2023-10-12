@@ -3,7 +3,7 @@ import math
 import torch
 
 class Node:
-    def __init__(self, game, args, state, parent = None, action = None, prob = 0):
+    def __init__(self, game, args, state, parent = None, action = None, prob = 0, visits = 0):
         self.game = game
         self.args = args
         self.state = state
@@ -12,7 +12,7 @@ class Node:
         self.prob = prob
         
         self.children = []
-        self.visits = 0
+        self.visits = visits
         self.value = 0
         
     def leaf_or_not(self):
@@ -64,8 +64,23 @@ class Alpha_MCTS:
         
     @torch.no_grad()
     def search(self, state):
-        root = Node(self.game, self.args, state)
+        root = Node(self.game, self.args, state, visits = 1)
 
+        if self.args["ROOT_POLICY_RANDOMNESS"]:
+            policy, _ = self.model(
+                        torch.tensor(self.game.get_encoded_state(state), device = self.model.device
+                    ).unsqueeze(0))
+
+
+            policy = torch.softmax(policy, axis = 1).squeeze(0).cpu().numpy()
+            
+            policy = (1 - self.args["DIRICHLET_EPSILON"]) * policy + self.args["DIRICHLET_EPSILON"] * np.random.dirichlet([self.args["DIRICHLET_ALPHA"]] * self.game.possible_state)
+            
+            valid_state = self.game.get_valid_moves(state)
+            policy *= valid_state
+            policy /= np.sum(policy)
+            root.expand(policy)
+        
         for _ in range(self.args["NO_OF_SEARCHES"]):
             node = root
                 
@@ -78,11 +93,11 @@ class Alpha_MCTS:
             if not is_terminal:
                 
                 policy, value = self.model(
-                    torch.tensor(self.game.get_encoded_state(node.state)).unsqueeze(0)
+                    torch.tensor(self.game.get_encoded_state(node.state), device = self.model.device).unsqueeze(0)
                 )
-                policy = torch.softmax(policy, axis=1).squeeze(0).cpu().numpy().astype(np.float128)
 
                 valid_state = self.game.get_valid_moves(node.state)
+                policy = torch.softmax(policy, axis = 1).squeeze(0).cpu().numpy().astype(np.float64)
 
                 policy *= valid_state
                 policy /= np.sum(policy)
