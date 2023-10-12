@@ -45,6 +45,7 @@ class TicTacToe:
         encoded_state = np.stack(
             (state == -1, state == 0, state == 1)
         ).astype(np.float32)
+        
         return encoded_state
                         
     def get_opponent(self, player):

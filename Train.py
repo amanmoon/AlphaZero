@@ -1,20 +1,21 @@
 from Games.TicTacToe.TicTacToe import TicTacToe
 from Games.TicTacToe.TicTacToeNN import ResNet
 from Alpha_Zero import Alpha_Zero
-
+from Alpha_MCTS import Alpha_MCTS
 import torch
+import numpy as np
 
 game = "TicTacToe"
 
 args = {
     "PATH_FOR_SAVING" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/{game}/models_n_optimizers/",
 
-    "EXPLORATION_CONSTANT" : 3,
+    "EXPLORATION_CONSTANT" : 2,
     "NO_OF_SEARCHES" : 60,
 
-    "NO_ITERATIONS" : 3,
-    "SELF_PLAY_ITERATIONS" : 500,
-    "EPOCHS" : 3,
+    "NO_ITERATIONS" : 10,
+    "SELF_PLAY_ITERATIONS" : 50,
+    "EPOCHS" : 4,
     "BATCH_SIZE" : 64,
     "MODEL_CHECK_GAMES" : 20
 }

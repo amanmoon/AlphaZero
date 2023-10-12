@@ -15,40 +15,39 @@ args = {
 }
 
 
-game = TicTacToe()
-model = ResNet(game, 4, 64)
+tictactoe = TicTacToe()
+model = ResNet(tictactoe, 4, 64)
+model.eval()
 
 path = args["PATH_FOR_SAVING"] + "model.pt"
 model.load_state_dict(torch.load(path))
-model.eval()
 
-mcts = Alpha_MCTS(game, args, model)
+mcts = Alpha_MCTS(tictactoe, args, model)
 
-state = game.initialise_state()
+state = tictactoe.initialise_state()
 
 player = 1
 
 while True:
     print(state)
-    
+        
     if player == 1:
-        valid_moves = game.get_valid_moves(state)
-        print("valid_moves", [i for i in range(game.possible_state) if valid_moves[i] == 1])
+        valid_moves = tictactoe.get_valid_moves(state)
+        print("valid_moves", [i for i in range(tictactoe.possible_state) if valid_moves[i] == 1])
         action = int(input(f"{player}:"))
 
         if valid_moves[action] == 0:
             print("action not valid")
             continue
             
-            
     else:
-        neutral_state = game.change_perspective(state, player)
+        neutral_state = tictactoe.change_perspective(state, player)
         mcts_probs = mcts.search(neutral_state)
         action = np.argmax(mcts_probs)
         
-    state = game.make_move(state, action, player)
+    state = tictactoe.make_move(state, action, player)
     
-    is_terminal, value = game.know_terminal_value(state, action)
+    is_terminal, value = tictactoe.know_terminal_value(state, action)
     
     if is_terminal:
         print(state)
@@ -58,4 +57,5 @@ while True:
             print("draw")
         break
         
-    player = game.get_opponent(player)
+        
+    player = tictactoe.get_opponent(player)

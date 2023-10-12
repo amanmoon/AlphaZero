@@ -48,13 +48,13 @@ class Node:
                 child = Node(self.game, self.args, child, self, move, prob)
                 self.children.append(child)
 
-    def backpropagate(self,value):
-        self.value += value
+    def backpropagate(self,state_value):
+        self.value += state_value
         self.visits += 1
         
-        value = self.game.get_opponent_value(value)
+        state_value = self.game.get_opponent_value(state_value)
         if self.parent is not None:
-            self.parent.backpropagate(value)
+            self.parent.backpropagate(state_value)
             
 class Alpha_MCTS:
     def __init__(self, game, args, model):
@@ -63,8 +63,8 @@ class Alpha_MCTS:
         self.model = model
         
     @torch.no_grad()
-    def search(self, node):
-        root = Node(self.game, self.args, node)
+    def search(self, state):
+        root = Node(self.game, self.args, state)
 
         for _ in range(self.args["NO_OF_SEARCHES"]):
             node = root
@@ -80,13 +80,13 @@ class Alpha_MCTS:
                 policy, value = self.model(
                     torch.tensor(self.game.get_encoded_state(node.state)).unsqueeze(0)
                 )
+                policy = torch.softmax(policy, axis=1).squeeze(0).cpu().numpy().astype(np.float128)
 
                 valid_state = self.game.get_valid_moves(node.state)
 
                 policy *= valid_state
                 policy /= np.sum(policy)
                 
-                policy = torch.softmax(policy, axis=1).squeeze(0).cpu().numpy().astype(np.float128)
                 value = value.item()
                 
                 node.expand(policy)
@@ -97,5 +97,4 @@ class Alpha_MCTS:
         for children in root.children:
             move_probability[children.action] = children.visits
         move_probability /= np.sum(move_probability)
-        print(move_probability)
         return move_probability

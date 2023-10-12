@@ -6,7 +6,6 @@ import torch
 import torch.nn.functional as F
 
 import tqdm 
-import copy
 
 
 
@@ -21,8 +20,8 @@ class Alpha_Zero:
     def self_play(self):
         
         single_game_memory = []
-        state = self.game.initialise_state()
         player = 1
+        state = self.game.initialise_state()
         
         while True:
             neutral_state = self.game.change_perspective(state, player)
@@ -66,7 +65,6 @@ class Alpha_Zero:
             value_targets = torch.tensor(value, dtype=torch.float32)
             
             out_policy, out_value = self.model(state)
-            # print("predicted policy",out_policy,"\n","target policy",policy_targets)
             policy_loss = F.cross_entropy(out_policy, policy_targets)
             value_loss = F.mse_loss(out_value, value_targets)
             loss = policy_loss + value_loss
@@ -152,7 +150,7 @@ class Alpha_Zero:
             # print("Testing Completed\nTrained Model Stats:")
             # print("Wins: ", wins,"| Loss: ", defeats, "| Draw: ", draws)
 
-            print("Saving Model...")
-            torch.save(self.model.state_dict(), self.args["PATH_FOR_SAVING"] + "model.pt")
-            torch.save(self.optimizer.state_dict(), self.args["PATH_FOR_SAVING"] + "optimizer.pt")
-            print("Saved!")
+        print("Saving Model...")
+        torch.save(self.model.state_dict(), self.args["PATH_FOR_SAVING"] + "model.pt")
+        torch.save(self.optimizer.state_dict(), self.args["PATH_FOR_SAVING"] + "optimizer.pt")
+        print("Saved!")
