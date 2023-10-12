@@ -2,9 +2,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-
-class Resnet(nn.Module):
-    
+class ResNet(nn.Module):
     def __init__(self, game, num_resBlocks, num_hidden):
         super().__init__()
         self.startBlock = nn.Sequential(
@@ -40,8 +38,9 @@ class Resnet(nn.Module):
             x = resBlock(x)
         policy = self.policyHead(x)
         value = self.valueHead(x)
-        return policy, value.squeeze(1)
-    
+        return policy, value
+        
+        
 class ResBlock(nn.Module):
     def __init__(self, num_hidden):
         super().__init__()
@@ -57,3 +56,4 @@ class ResBlock(nn.Module):
         x += residual
         x = F.relu(x)
         return x
+        
