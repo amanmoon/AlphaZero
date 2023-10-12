@@ -8,10 +8,10 @@ import torch
 
 game = "TicTacToe"
 args = {
-    "PATH_FOR_SAVING" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/{game}/models_n_optimizers/",
+    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/{game}/models_n_optimizers/",
 
-    "NO_OF_SEARCHES" : 2,
-    "EXPLORATION_CONSTANT" : 2,
+    "NO_OF_SEARCHES" : 1000,
+    "EXPLORATION_CONSTANT" : 1,
 }
 
 
@@ -19,7 +19,7 @@ tictactoe = TicTacToe()
 model = ResNet(tictactoe, 4, 64)
 model.eval()
 
-path = args["PATH_FOR_SAVING"] + "model.pt"
+path = args["MODEL_PATH"] + "model.pt"
 model.load_state_dict(torch.load(path))
 
 mcts = Alpha_MCTS(tictactoe, args, model)

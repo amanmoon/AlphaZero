@@ -9,6 +9,18 @@ import tqdm
 import copy
 
 
+
+class Colors:
+    RESET = "\033[0m"
+    RED = "\033[91m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    BLUE = "\033[94m"
+    MAGENTA = "\033[95m"
+    CYAN = "\033[96m"
+    WHITE = "\033[97m"
+
+
 class Alpha_Zero:
     def __init__(self, game, args, model, optimizer):
         self.game = game
@@ -81,81 +93,47 @@ class Alpha_Zero:
         return avg_loss
 
     def compare_models(self, initial_model):
-        self.model.eval()
-        initial_model.eval()
-        trained_MCTS = Alpha_MCTS(self.game, self.args, self.model)
-        untrained_MCTS = Alpha_MCTS(self.game, self.args, initial_model)
-        
-        trained_score = 0
-        untrained_score = 0
-        draw = 0
-        
-        for k in range(2):
-            
-            MCTS = trained_MCTS if k == 0 else untrained_MCTS
-            
-            for i in range(self.args["MODEL_CHECK_GAMES"] // 2):
-                state = self.game.initialise_state()
-                state = self.game.make_move(state, i // 9, 1)
-                player = 1
-                while True:
-                    neutral_state = self.game.change_perspective(state)
-                    out = MCTS.search(neutral_state)
-                    move = np.argmax(out)
-                    state = self.game.make_move(state, move, player)
-                    is_terminal, value = self.game.know_terminal_value(state, move)
-
-                    if is_terminal:
-                        if MCTS == trained_MCTS and value == 1 :
-                            trained_score += 1
-                        elif MCTS == untrained_MCTS and value == 1:
-                            untrained_score += 1
-                        elif value == 0:
-                            draw += 1
-                        break
-                    MCTS = trained_MCTS if MCTS == untrained_MCTS else untrained_MCTS
-                    player = self.game.get_opponent(player)
-
-        return (self.model, trained_score, draw, untrained_score) if trained_score >= untrained_score else (initial_model, trained_score, draw, untrained_score)
+        """this function take input as initial model and plays trained and untrained model and output win, loss, draw"""
+        pass
         
     def learn(self):
         try:
-            path = self.args["PATH_FOR_SAVING"] + 'model.pt'
+            path = self.args["MODEL_PATH"] + 'model.pt'
             self.model.load_state_dict(torch.load(path))
         
         except:
-            print("UNABLE TO LOAD MODEL\nSETTING UP NEW MODEL...")
+            print(Colors.RED + "UNABLE TO LOAD MODEL\nSETTING UP NEW MODEL...")
+            print(Colors.GREEN + "SETTING UP NEW MODEL..." + Colors.RESET)
             
         else:
-            print("MODEL FOUND\nLOADING MODEL...")
+            print(Colors.GREEN + "MODEL FOUND\nLOADING MODEL..." + Colors.RESET)
         finally:
-            initial_model = copy.copy(self.model)
+            # initial_model = copy.copy(self.model)
             for iteration in range(self.args["NO_ITERATIONS"]):
                 memory = []
     
-    
-                print("\niteration no: " , iteration + 1)
-                print("Self Play")
+                print(Colors.BLUE + "\niteration no: " , iteration + 1, Colors.RESET)
+                print(Colors.YELLOW + "Self Play" + Colors.RESET)
                 
                 self.model.eval()
                 for _ in tqdm.trange(self.args["SELF_PLAY_ITERATIONS"]):
                     memory += self.self_play()
 
-                print("Training...")
+                print(Colors.YELLOW + "Training..." + Colors.RESET)
                 
                 self.model.train()
                 for _ in tqdm.trange(self.args["EPOCHS"]):
                     loss= self.train(memory)
-                print("Loss: ", loss.squeeze(0).item())
+                print(Colors.YELLOW + "Loss: ", Colors.MAGENTA, loss.squeeze(0).item(), Colors.RESET)
                 
-            print("Testing...")
-            self.model.eval()
-            initial_model.eval()
-            self.model, wins, draws, defeats  = self.compare_models(initial_model)
-            print("Testing Completed\nTrained Model Stats:")
-            print("Wins: ", wins,"| Loss: ", defeats, "| Draw: ", draws)
+                # print("Testing...")
+                # self.model.eval()
+                # initial_model.eval()
+                # self.model, wins, draws, defeats  = self.compare_models(initial_model)
+                # print("Testing Completed\nTrained Model Stats:")
+                # print("Wins: ", wins,"| Loss: ", defeats, "| Draw: ", draws)
 
-        print("Saving Model...")
-        torch.save(self.model.state_dict(), self.args["PATH_FOR_SAVING"] + "model.pt")
-        torch.save(self.optimizer.state_dict(), self.args["PATH_FOR_SAVING"] + "optimizer.pt")
-        print("Saved!")
+        print(Colors.YELLOW + "Saving Model...")
+        torch.save(self.model.state_dict(), self.args["MODEL_PATH"] + "model.pt")
+        torch.save(self.optimizer.state_dict(), self.args["MODEL_PATH"] + "optimizer.pt")
+        print("Saved!" + Colors.RESET)
