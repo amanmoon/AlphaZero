@@ -13,8 +13,8 @@ args = {
     "TEMPERATURE" : 1,
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
-    "ROOT_POLICY_RANDOMNESS" : False,
-    "NO_OF_SEARCHES" : 2,
+    "ROOT_POLICY_RANDOMNESS" : True,
+    "NO_OF_SEARCHES" : 1,
     "EXPLORATION_CONSTANT" : 2,
 }
 
@@ -22,7 +22,7 @@ args = {
 tictactoe = TicTacToe()
 device = torch.device("cuda" if torch.cuda.is_available else "cpu")
 
-model = ResNet(tictactoe, 4, 64, device)
+model = ResNet(tictactoe, 9, 128, device)
 model.eval()
 
 path = args["MODEL_PATH"] + "model.pt"
@@ -49,6 +49,7 @@ while True:
     else:
         neutral_state = tictactoe.change_perspective(state, player)
         mcts_probs = mcts.search(neutral_state)
+        print(mcts_probs)
         action = np.argmax(mcts_probs)
         
     state = tictactoe.make_move(state, action, player)

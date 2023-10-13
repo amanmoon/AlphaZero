@@ -8,8 +8,6 @@ import torch.nn.functional as F
 from tqdm import trange  
 import copy
 
-
-
 class Colors:
     RESET = "\033[0m"
     RED = "\033[91m"
@@ -90,11 +88,11 @@ class Alpha_Zero:
             self.optimizer.step()
 
     
-    def compare_models(self, untrained_model):
+    def compare_models(self,trained_model, untrained_model):
         self.model.eval()
         untrained_model.eval()
-        model_1 = Alpha_MCTS(self.game, self.args, untrained_model)
-        model_2 = self.mcts
+        model_1 = Alpha_MCTS(self.game, self.args, trained_model)
+        model_2 = Alpha_MCTS(self.game, self.args, untrained_model)
 
         model_1_wins = 0
         model_2_wins = 0
@@ -103,8 +101,9 @@ class Alpha_Zero:
         for i in range(self.args["MODEL_CHECK_GAMES"]):
             
             if i > self.args["MODEL_CHECK_GAMES"] // 2:
+                temp = model_2
                 model_2 = model_1
-                model_1 = self.mcts
+                model_1 = temp
                 
             state = self.game.initialise_state()
             player = -1
@@ -170,7 +169,7 @@ class Alpha_Zero:
             for iteration in range(self.args["NO_ITERATIONS"]):
                 memory = []
     
-                print(Colors.BLUE + "\niteration no: " , iteration + 1, Colors.RESET)
+                print(Colors.BLUE + "\nIteration no: " , iteration + 1, Colors.RESET)
                 
                 print(Colors.YELLOW + "Self Play" + Colors.RESET)
                 self.model.eval()
@@ -186,7 +185,7 @@ class Alpha_Zero:
                 
                 print(Colors.YELLOW + "Testing..." + Colors.RESET)
                 self.model.eval()
-                wins, draws, defeats = self.compare_models(initial_model)
+                wins, draws, defeats = self.compare_models(self.model, initial_model)
                 print("Testing Completed\nTrained Model Stats:")
                 print(Colors.GREEN, "Wins: ", wins, Colors.RESET, "|", Colors.RED, "Loss: ", defeats, Colors.RESET, "|", Colors.WHITE," Draw: ", draws, Colors.RESET)
                 

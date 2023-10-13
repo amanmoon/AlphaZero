@@ -99,7 +99,7 @@ class Alpha_MCTS:
                 valid_state = self.game.get_valid_moves(node.state)
                 policy = torch.softmax(policy, axis = 1).squeeze(0).cpu().numpy().astype(np.float64)
 
-                policy *= valid_state
+                policy *= valid_state 
                 policy /= np.sum(policy)
                 
                 value = value.item()

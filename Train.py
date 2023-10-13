@@ -9,18 +9,19 @@ args = {
     "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/{game}/models_n_optimizers/",
 
     "EXPLORATION_CONSTANT" : 2,
-    "TEMPERATURE" : 1,
+    "TEMPERATURE" : 1.5,
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
 
-    "ROOT_POLICY_RANDOMNESS" : False,
+    "ROOT_POLICY_RANDOMNESS" : True,
     "ADVERSIRIAL" : True,
 
-    "NO_OF_SEARCHES" : 1000,
-    "NO_ITERATIONS" : 200,
-    "SELF_PLAY_ITERATIONS" : 100,
+    "NO_OF_SEARCHES" : 600,
+    "NO_ITERATIONS" : 3,
+    "SELF_PLAY_ITERATIONS" : 500,
+    "PARALLEL_PROCESS" : 10,
     "EPOCHS" : 4,
-    "BATCH_SIZE" : 64,
+    "BATCH_SIZE" : 100,
     "MODEL_CHECK_GAMES" : 18
 }
 
@@ -29,7 +30,7 @@ game = TicTacToe()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device, "in use")
 
-model = ResNet(game, 4, 64, device)
+model = ResNet(game, 9, 128, device)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay = 0.00001)
 
 state = game.initialise_state()
