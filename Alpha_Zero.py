@@ -98,7 +98,7 @@ class Alpha_Zero:
         model_2_wins = 0
         draw = 0
 
-        for i in range(self.args["MODEL_CHECK_GAMES"]):
+        for i in trange(self.args["MODEL_CHECK_GAMES"]):
             
             if i > self.args["MODEL_CHECK_GAMES"] // 2:
                 temp = model_2
@@ -112,7 +112,6 @@ class Alpha_Zero:
             while True:
                 neutral_state = self.game.change_perspective(state, player)
                 prob = model_1.search(neutral_state)
-                # move = np.random.choice(self.game.possible_state, p = prob)
                 move = np.argmax(prob)
                 
                 player = self.game.get_opponent(player)
@@ -128,9 +127,7 @@ class Alpha_Zero:
                         model_1_wins += 1
                     break
                 player = self.game.get_opponent(player)
-                neutral_state = self.game.change_perspective(state, player)
-                prob = model_2.search(neutral_state)
-                # move = np.random.choice(self.game.possible_state, p = prob)
+                prob = model_2.search(state)
                 move = np.argmax(prob)
                 self.game.make_move(state, move, player)
                 
@@ -186,7 +183,7 @@ class Alpha_Zero:
                 print(Colors.YELLOW + "Testing..." + Colors.RESET)
                 self.model.eval()
                 wins, draws, defeats = self.compare_models(self.model, initial_model)
-                print("Testing Completed\nTrained Model Stats:")
+                print(Colors.GREEN + "Testing Completed" + Colors.WHITE + "\nTrained Model Stats:")
                 print(Colors.GREEN, "Wins: ", wins, Colors.RESET, "|", Colors.RED, "Loss: ", defeats, Colors.RESET, "|", Colors.WHITE," Draw: ", draws, Colors.RESET)
                 
             print(Colors.YELLOW + "Saving Model...")
