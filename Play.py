@@ -63,5 +63,5 @@ while True:
         else:
             print("draw")
         break
-        
+
     player = tictactoe.get_opponent(player)
