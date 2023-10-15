@@ -2,9 +2,9 @@
 
 class GAME:
     def __init__(self):
-        self.row = None
-        self.col = None
-        self.possible_state = self.row * self.col # no of possible state game can have (no of possible moves) 
+        self.row = 8
+        self.col = 8
+        self.possible_state = self.row * self.col 
     
     def initialise_state(self):
         """NOTE: this fuction creates starting position for your game"""

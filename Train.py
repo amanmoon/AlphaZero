@@ -13,7 +13,6 @@ args = {
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
 
-    "ROOT_POLICY_RANDOMNESS" : True,
     "ADVERSIRIAL" : True,
 
     "NO_OF_SEARCHES" : 600,

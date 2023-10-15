@@ -66,7 +66,7 @@ class Alpha_MCTS:
     def search(self, state):
         root = Node(self.game, self.args, state, visits = 1)
 
-        if self.args["ROOT_POLICY_RANDOMNESS"]:
+        if self.model.training:
             policy, _ = self.model(
                         torch.tensor(self.game.get_encoded_state(state), device = self.model.device
                     ).unsqueeze(0))

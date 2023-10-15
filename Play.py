@@ -13,8 +13,7 @@ args = {
     "TEMPERATURE" : 1,
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
-    "ROOT_POLICY_RANDOMNESS" : True,
-    "NO_OF_SEARCHES" : 1,
+    "NO_OF_SEARCHES" : 2,
     "EXPLORATION_CONSTANT" : 2,
 }
 
@@ -31,7 +30,7 @@ model.load_state_dict(torch.load(path))
 mcts = Alpha_MCTS(tictactoe, args, model)
 
 state = tictactoe.initialise_state()
-
+print(model.training)
 player = 1
 
 while True:
