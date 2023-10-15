@@ -10,6 +10,8 @@ game = "TicTacToe"
 args = {
     "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/{game}/models_n_optimizers/",
 
+    "ADVERSARIAL" : True,
+
     "TEMPERATURE" : 1,
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
@@ -30,7 +32,6 @@ model.load_state_dict(torch.load(path))
 mcts = Alpha_MCTS(tictactoe, args, model)
 
 state = tictactoe.initialise_state()
-print(model.training)
 player = 1
 
 while True:

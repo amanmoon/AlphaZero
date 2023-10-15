@@ -1,6 +1,7 @@
 from Games.TicTacToe.TicTacToe import TicTacToe
 from Games.TicTacToe.TicTacToeNN import ResNet
 from Alpha_Zero import Alpha_Zero
+
 import torch
 
 game = "TicTacToe"
@@ -13,9 +14,9 @@ args = {
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
 
-    "ADVERSIRIAL" : True,
+    "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 600,
+    "NO_OF_SEARCHES" : 1200,
     "NO_ITERATIONS" : 3,
     "SELF_PLAY_ITERATIONS" : 500,
     "PARALLEL_PROCESS" : 10,
@@ -30,7 +31,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device, "in use")
 
 model = ResNet(game, 9, 128, device)
-optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, weight_decay = 0.00001)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay = 0.0001)
 
 state = game.initialise_state()
 

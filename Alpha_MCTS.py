@@ -43,7 +43,8 @@ class Node:
             if prob > 0:
                 child = self.state.copy()
                 child = self.game.make_move(child, move, 1)
-                child = self.game.change_perspective(child, player = -1)
+                if self.args["ADVERSARIAL"]:
+                    child = self.game.change_perspective(child, player = -1)
 
                 child = Node(self.game, self.args, child, self, move, prob)
                 self.children.append(child)
@@ -51,8 +52,8 @@ class Node:
     def backpropagate(self,state_value):
         self.value += state_value
         self.visits += 1
-        
-        state_value = self.game.get_opponent_value(state_value)
+        if self.args["ADVERSARIAL"]:
+            state_value = self.game.get_opponent_value(state_value)
         if self.parent is not None:
             self.parent.backpropagate(state_value)
             
@@ -88,7 +89,9 @@ class Alpha_MCTS:
                 node = node.search()
               
             is_terminal, value = self.game.know_terminal_value(node.state, node.action)
-            value = self.game.get_opponent_value(value)
+            
+            if self.args["ADVERSARIAL"]:
+                value = self.game.get_opponent_value(value)
             
             if not is_terminal:
                 

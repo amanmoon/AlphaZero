@@ -34,7 +34,7 @@ class Alpha_Zero:
         state = self.game.initialise_state()
         
         while True:
-            neutral_state = self.game.change_perspective(state, player)
+            neutral_state = self.game.change_perspective(state, player) if self.args["ADVERSARIAL"] else state
             prob = self.mcts.search(neutral_state)
             
             single_game_memory.append((neutral_state, prob, player))
@@ -50,15 +50,20 @@ class Alpha_Zero:
             if is_terminal:
                 return_memory = []
                 for return_state, return_action_prob, return_player in single_game_memory:
-                    return_value = value if return_player == player else self.game.get_opponent_value(value)
+                    if self.args["ADVERSIRIAL"]:
+                        return_value = value if return_player == player else self.game.get_opponent_value(value)
+                    else: 
+                        return_value = value
+                        
                     return_memory.append((
                         self.game.get_encoded_state(return_state), 
                         return_action_prob, 
                         return_value
                     ))
                 return return_memory
-                
-            player = self.game.get_opponent(player)
+            
+            if self.args["ADVERSARIAL"]:    
+                player = self.game.get_opponent(player)
     
     def train(self, memory):
         
@@ -114,7 +119,8 @@ class Alpha_Zero:
                 prob = model_1.search(neutral_state)
                 move = np.argmax(prob)
                 
-                player = self.game.get_opponent(player)
+                if self.args["ADVERSARIAL"]:
+                    player = self.game.get_opponent(player)
                 self.game.make_move(state, move, player)
                 is_terminal, value = self.game.know_terminal_value(state, move)
                 if is_terminal:
@@ -126,13 +132,16 @@ class Alpha_Zero:
                     else: 
                         model_1_wins += 1
                     break
-                player = self.game.get_opponent(player)
+                
+                if self.args["ADVERSARIAL"]:
+                    player = self.game.get_opponent(player)
+
                 prob = model_2.search(state)
                 move = np.argmax(prob)
                 self.game.make_move(state, move, player)
                 
-                
                 is_terminal, value = self.game.know_terminal_value(state, move)
+                
                 if is_terminal:
                     if value == 0:
                         draw += 1
@@ -141,7 +150,6 @@ class Alpha_Zero:
                         model_1_wins += 1
                     else:
                         model_2_wins += 1
-                        
                     break
 
         return  model_1_wins, draw, model_2_wins,
