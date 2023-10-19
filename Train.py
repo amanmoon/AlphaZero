@@ -14,13 +14,13 @@ args = {
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 5000,
+    "NO_OF_SEARCHES" : 1200,
     "NO_ITERATIONS" : 3,
     "SELF_PLAY_ITERATIONS" : 500,
     "PARALLEL_PROCESS" : 10,
     "EPOCHS" : 4,
-    "BATCH_SIZE" : 50,
-    "MODEL_CHECK_GAMES" : 18
+    "BATCH_SIZE" : 100,
+    "MODEL_CHECK_GAMES" : 80
 }
 
 

@@ -38,8 +38,9 @@ class Alpha_Zero:
             prob = self.mcts.search(neutral_state)
             
             single_game_memory.append((neutral_state, prob, player))
-            
+
             temp_prob = prob ** (1 / self.args["TEMPERATURE"])
+
             temp_prob = torch.softmax(torch.tensor(temp_prob), axis = 0).cpu().numpy()
 
             move = np.random.choice(self.game.possible_state, p = temp_prob)
@@ -127,6 +128,7 @@ class Alpha_Zero:
                     if value == 0:
                         draw += 1
                         break
+                    
                     elif i > self.args["MODEL_CHECK_GAMES"] // 2:
                         model_2_wins += 1
                     else: 
@@ -186,7 +188,6 @@ class Alpha_Zero:
                 for _ in trange(self.args["EPOCHS"]):
                     self.train(memory)
                     
-                
                 
                 print(Colors.YELLOW + "Testing..." + Colors.RESET)
                 self.model.eval()

@@ -6,16 +6,14 @@ import numpy as np
 
 import torch
 
-game = "TicTacToe"
 args = {
-    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/{game}/models_n_optimizers/",
+    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/TicTacToe/models_n_optimizers/",
 
     "ADVERSARIAL" : True,
 
     "TEMPERATURE" : 1,
-    "DIRICHLET_EPSILON" : 0.25,
-    "DIRICHLET_ALPHA" : 0.3,
-    "NO_OF_SEARCHES" : 10,
+
+    "NO_OF_SEARCHES" : 2,
     "EXPLORATION_CONSTANT" : 2,
 }
 
