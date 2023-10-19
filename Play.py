@@ -15,7 +15,7 @@ args = {
     "TEMPERATURE" : 1,
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
-    "NO_OF_SEARCHES" : 2,
+    "NO_OF_SEARCHES" : 10,
     "EXPLORATION_CONSTANT" : 2,
 }
 

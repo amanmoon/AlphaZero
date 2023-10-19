@@ -50,7 +50,7 @@ class Alpha_Zero:
             if is_terminal:
                 return_memory = []
                 for return_state, return_action_prob, return_player in single_game_memory:
-                    if self.args["ADVERSIRIAL"]:
+                    if self.args["ADVERSARIAL"]:
                         return_value = value if return_player == player else self.game.get_opponent_value(value)
                     else: 
                         return_value = value

@@ -4,10 +4,8 @@ from Alpha_Zero import Alpha_Zero
 
 import torch
 
-game = "TicTacToe"
-
 args = {
-    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/{game}/models_n_optimizers/",
+    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/TicTacToe/models_n_optimizers/",
 
     "EXPLORATION_CONSTANT" : 2,
     "TEMPERATURE" : 1.5,
@@ -16,12 +14,12 @@ args = {
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 1200,
+    "NO_OF_SEARCHES" : 5000,
     "NO_ITERATIONS" : 3,
     "SELF_PLAY_ITERATIONS" : 500,
     "PARALLEL_PROCESS" : 10,
     "EPOCHS" : 4,
-    "BATCH_SIZE" : 100,
+    "BATCH_SIZE" : 50,
     "MODEL_CHECK_GAMES" : 18
 }
 
