@@ -8,14 +8,14 @@ args = {
     "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/ConnectFour/models_n_optimizers/",
 
     "EXPLORATION_CONSTANT" : 2,
-    "TEMPERATURE" : 1.5,
+    "TEMPERATURE" : 1.25,
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 120,
-    "NO_ITERATIONS" : 3,
+    "NO_OF_SEARCHES" : 1200,
+    "NO_ITERATIONS" : 1,
     "SELF_PLAY_ITERATIONS" : 500,
     "PARALLEL_PROCESS" : 10,
     "EPOCHS" : 4,

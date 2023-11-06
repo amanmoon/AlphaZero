@@ -3,8 +3,8 @@ import numpy as np
 import torch
 
 from Alpha_MCTS import Alpha_MCTS
-from Games.TicTacToe.TicTacToe import TicTacToe
-from Games.TicTacToe.TicTacToeNN import ResNet
+from Games.ConnectFour.ConnectFour import ConnectFour
+from Games.ConnectFour.ConnectFourNN import ResNet
 
 from tqdm import trange   
     
@@ -28,6 +28,7 @@ def Arena(game, args, trained_model, untrained_model):
         player = 1
         move = np.random.choice(game.possible_state, p = model_1.search(state))
         game.make_move(state, move, player)
+        
         while True:
             neutral_state = game.change_perspective(state, player)
             prob = model_1.search(neutral_state)
@@ -73,30 +74,30 @@ def Arena(game, args, trained_model, untrained_model):
 
 
 args = {
-    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/TicTacToe/models_n_optimizers/",
+    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/ConnectFour/models_n_optimizers/",
 
     "ADVERSARIAL" : True,
 
     "TEMPERATURE" : 1,
 
-    "NO_OF_SEARCHES" : 2,
+    "NO_OF_SEARCHES" : 20,
     "EXPLORATION_CONSTANT" : 2,
     "MODEL_CHECK_GAMES": 100
 }
 
 
-tictactoe = TicTacToe()
+game = ConnectFour()
 device = torch.device("cuda" if torch.cuda.is_available else "cpu")
 
-model1 = ResNet(tictactoe, 9, 128, device)
-model2 = ResNet(tictactoe, 9, 128, device)
-
+model1 = ResNet(game, 9, 128, device)
 model1.eval()
+
+model2 = ResNet(game, 9, 128, device)
 model2.eval()
 
-path = args["MODEL_PATH"]
+path = args["MODEL_PATH"] 
+    
+model1.load_state_dict(torch.load(path + "model.pt"))
+# model2.load_state_dict(torch.load(path + "model2.pt"))
 
-model1 = model1.load_state_dict(torch.load(path + "model1.pt"))
-model2 = model2.load_state_dict(torch.load(path + "model2.pt"))
-
-print(Arena(tictactoe, args, model1, model2))
+print(Arena(game, args, model1, model2))

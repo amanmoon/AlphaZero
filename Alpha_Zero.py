@@ -114,7 +114,7 @@ class Alpha_Zero:
                 model_1 = temp
                 
             state = self.game.initialise_state()
-            player = -1
+            player = 1
             move = i % self.game.possible_state
             self.game.make_move(state, move, player)
             while True:
