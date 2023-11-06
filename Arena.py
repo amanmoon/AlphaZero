@@ -9,8 +9,7 @@ from Games.TicTacToe.TicTacToeNN import ResNet
 from tqdm import trange   
     
 def Arena(game, args, trained_model, untrained_model):
-    trained_model.eval()
-    untrained_model.eval()
+
     model_1 = Alpha_MCTS(game, args, trained_model)
     model_2 = Alpha_MCTS(game, args, untrained_model)
 
@@ -82,6 +81,7 @@ args = {
 
     "NO_OF_SEARCHES" : 2,
     "EXPLORATION_CONSTANT" : 2,
+    "MODEL_CHECK_GAMES": 100
 }
 
 
@@ -96,7 +96,7 @@ model2.eval()
 
 path = args["MODEL_PATH"]
 
-model1 = model1.load_state_dict(path + "model1.pt")
-model2 = model2.load_state_dict(path + "model2.pt")
+model1 = model1.load_state_dict(torch.load(path + "model1.pt"))
+model2 = model2.load_state_dict(torch.load(path + "model2.pt"))
 
 print(Arena(tictactoe, args, model1, model2))

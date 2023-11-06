@@ -7,7 +7,7 @@ class TicTacToe:
         self.possible_state = self.col * self.row 
     
     def initialise_state(self):
-        return np.zeros((self.col,self.row))
+        return np.zeros((self.row, self.col))
         
     def get_valid_moves(self, state):
         return (state.reshape(-1) == 0).astype(np.uint8)

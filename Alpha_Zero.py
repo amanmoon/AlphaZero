@@ -40,11 +40,13 @@ class Alpha_Zero:
             single_game_memory.append((neutral_state, prob, player))
 
             temp_prob = prob ** (1 / self.args["TEMPERATURE"])
-
+            
+            temp_prob[temp_prob == 0] = - np.inf
+                    
             temp_prob = torch.softmax(torch.tensor(temp_prob), axis = 0).cpu().numpy()
 
             move = np.random.choice(self.game.possible_state, p = temp_prob)
-            
+       
             state = self.game.make_move(state, move, player)
             is_terminal, value = self.game.know_terminal_value(state, move)
             
@@ -154,7 +156,7 @@ class Alpha_Zero:
                         model_2_wins += 1
                     break
 
-        return  model_1_wins, draw, model_2_wins,
+        return  model_1_wins, draw, model_2_wins
         
     def learn(self):
         try:

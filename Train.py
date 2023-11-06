@@ -1,11 +1,11 @@
-from Games.TicTacToe.TicTacToe import TicTacToe
-from Games.TicTacToe.TicTacToeNN import ResNet
+from Games.ConnectFour.ConnectFour import ConnectFour
+from Games.ConnectFour.ConnectFourNN import ResNet
 from Alpha_Zero import Alpha_Zero
 
 import torch
 
 args = {
-    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/TicTacToe/models_n_optimizers/",
+    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/ConnectFour/models_n_optimizers/",
 
     "EXPLORATION_CONSTANT" : 2,
     "TEMPERATURE" : 1.5,
@@ -14,7 +14,7 @@ args = {
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 1200,
+    "NO_OF_SEARCHES" : 120,
     "NO_ITERATIONS" : 3,
     "SELF_PLAY_ITERATIONS" : 500,
     "PARALLEL_PROCESS" : 10,
@@ -24,7 +24,7 @@ args = {
 }
 
 
-game = TicTacToe()
+game = ConnectFour()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device, "in use")
 
