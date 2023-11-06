@@ -2,7 +2,7 @@ import numpy as np
 
 import torch
 
-from Alpha_MCTS import Alpha_MCTS
+from Alpha_MCTS_Parallel import Alpha_MCTS
 from Games.ConnectFour.ConnectFour import ConnectFour
 from Games.ConnectFour.ConnectFourNN import ResNet
 

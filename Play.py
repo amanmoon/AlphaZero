@@ -26,8 +26,10 @@ args = {
 
     "TEMPERATURE" : 1,
 
-    "NO_OF_SEARCHES" : 1200,
+    "NO_OF_SEARCHES" : 120,
     "EXPLORATION_CONSTANT" : 2,
+    
+    "TRAIN": False
 }
 
 
@@ -50,7 +52,7 @@ finally:
     mcts = Alpha_MCTS(game, args, model)
     
     state = game.initialise_state()
-    player = -1
+    player = 1
     
     while True:
         print(state)
