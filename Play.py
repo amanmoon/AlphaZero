@@ -19,9 +19,9 @@ class Colors:
     CYAN = "\033[96m"
     WHITE = "\033[97m"
     
-    
+GAME = "ConnectFour"
 args = {
-    "MODEL_PATH" : os.path.join(os.getcwd(), "Games", "ConnectFour", "models_n_optimizers"),
+    "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
 
     "ADVERSARIAL" : True,
 

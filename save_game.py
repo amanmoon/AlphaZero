@@ -1,6 +1,7 @@
 from Alpha_Zero_Parallel import Alpha_Zero
 from Games.ConnectFour.ConnectFour import ConnectFour
 from Games.ConnectFour.ConnectFourNN import ResNet
+
 from tqdm import trange
 
 import shelve
@@ -22,8 +23,8 @@ class Colors:
 
 def save_games(args, game, model, optimizer):
         try:
-            model_path = args["MODEL_PATH"] + 'model.pt'
-            optimizer_path = args["MODEL_PATH"] + 'optimizer.pt'
+            model_path = os.path.join(args["MODEL_PATH"], 'model.pt')
+            optimizer_path = os.path.join(args["MODEL_PATH"], 'optimizer.pt')
 
             model.load_state_dict(torch.load(model_path))
             optimizer.load_state_dict(torch.load(optimizer_path))

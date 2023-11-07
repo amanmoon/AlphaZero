@@ -1,10 +1,12 @@
-import numpy as np
-
-import torch
 
 from Alpha_MCTS import Alpha_MCTS
 from Games.TicTacToe.TicTacToe import TicTacToe
 from Games.TicTacToe.TicTacToeNN import ResNet
+
+import numpy as np
+import os
+
+import torch
 
 from tqdm import trange   
     
@@ -72,9 +74,9 @@ def Arena(game, args, trained_model, untrained_model):
 
     return  model_1_wins, draw, model_2_wins
 
-
+GAME = "ConnectFour"
 args = {
-    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/TicTacToe/models_n_optimizers/",
+    "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
 
     "ADVERSARIAL" : True,
 
@@ -94,10 +96,10 @@ model1.eval()
 
 model2 = ResNet(game, 9, 128, device)
 model2.eval()
-
-path = args["MODEL_PATH"] 
+ 
     
-model1.load_state_dict(torch.load(path + "model.pt"))
-# model2.load_state_dict(torch.load(path + "model2.pt"))
+model1.load_state_dict(torch.load(os.path.join(args["MODEL_PATH"], "model1.pt")))
+model2.load_state_dict(torch.load(os.path.join(args["MODEL_PATH"], "model2.pt")))
 
 print(Arena(game, args, model1, model2))
+

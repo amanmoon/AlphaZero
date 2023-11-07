@@ -1,14 +1,15 @@
-from Alpha_MCTS_Parallel import Alpha_MCTS 
+from Alpha_MCTS_Parallel import Alpha_MCTS
+
 import numpy as np
 import random
 import os
+import copy
 
 import torch
 import torch.nn.functional as F
 
 from tqdm import trange  
 
-import copy
 
 class Colors:
     RESET = "\033[0m"

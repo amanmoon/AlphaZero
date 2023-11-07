@@ -6,20 +6,22 @@ import os
 
 import torch
 
+GAME = "ConnectFour"
+
 args = {
-    "MODEL_PATH" : os.path.join(os.getcwd(), "Games", "ConnectFour", "models_n_optimizers"),
+    "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
 
     "EXPLORATION_CONSTANT" : 2,
 
-    "TEMPERATURE" : 1.75,
+    "TEMPERATURE" : 1.25,
 
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
-    "ROOT_RANDOMNESS": False,
+    "ROOT_RANDOMNESS": True,
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 5000,
+    "NO_OF_SEARCHES" : 600,
     "NO_ITERATIONS" : 100,
     "SELF_PLAY_ITERATIONS" : 10,
     "PARALLEL_PROCESS" : 5,
