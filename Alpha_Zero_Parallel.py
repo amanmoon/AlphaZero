@@ -6,7 +6,6 @@ import torch
 import torch.nn.functional as F
 
 from tqdm import trange  
-from rich.progress import Progress
 
 import copy
 
@@ -35,11 +34,7 @@ class Alpha_Zero:
         player = 1
         spGames = [SPG(self.game) for _ in range(self.args["PARALLEL_PROCESS"])]
         
-        # with Progress() as progress:
-            # task = progress.add_task("[cyan]Processing...", total = self.args["PARALLEL_PROCESS"])
-        
         while len(spGames) > 0:
-            # progress.update(task, advance = 1)
             
             states = np.stack([spg.state for spg in spGames])
             neutral_states = self.game.change_perspective(states, player) if self.args["ADVERSARIAL"] else states
@@ -192,7 +187,7 @@ class Alpha_Zero:
             print(Colors.GREEN + "MODEL FOUND\nLOADING MODEL..." + Colors.RESET)
         finally:
 
-            initial_model = copy.copy(self.model)
+            # initial_model = copy.copy(self.model)
             
             for iteration in range(self.args["NO_ITERATIONS"]):
                 memory = []

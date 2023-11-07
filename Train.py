@@ -9,7 +9,7 @@ args = {
 
     "EXPLORATION_CONSTANT" : 2,
 
-    "TEMPERATURE" : 1.25,
+    "TEMPERATURE" : 1.75,
 
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
@@ -17,12 +17,12 @@ args = {
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 2000,
-    "NO_ITERATIONS" : 100,
-    "SELF_PLAY_ITERATIONS" : 600,
-    "PARALLEL_PROCESS" : 200,
+    "NO_OF_SEARCHES" : 2,
+    "NO_ITERATIONS" : 80,
+    "SELF_PLAY_ITERATIONS" : 100,
+    "PARALLEL_PROCESS" : 50,
     "EPOCHS" : 4,
-    "BATCH_SIZE" : 50,
+    "BATCH_SIZE" : 10,
     "MODEL_CHECK_GAMES" : 80,
     
 }
