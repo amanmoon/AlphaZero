@@ -8,6 +8,7 @@ import torch.nn.functional as F
 from tqdm import trange  
 
 import copy
+import shelve
 
 class Colors:
     RESET = "\033[0m"
@@ -197,7 +198,8 @@ class Alpha_Zero:
                 print(Colors.YELLOW + "Self Play" + Colors.RESET)
                 self.model.eval()
                 for _ in trange(self.args["SELF_PLAY_ITERATIONS"] // self.args["PARALLEL_PROCESS"]):
-                    memory += self.self_play()
+                    memory += self.self_play()             
+
                     
                 print(Colors.YELLOW + "Training..." + Colors.RESET)
                 self.model.train()

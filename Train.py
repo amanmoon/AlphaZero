@@ -13,16 +13,16 @@ args = {
 
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
-    "ROOT_RANDOMNESS": True,
+    "ROOT_RANDOMNESS": False,
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 2,
-    "NO_ITERATIONS" : 80,
-    "SELF_PLAY_ITERATIONS" : 100,
-    "PARALLEL_PROCESS" : 50,
+    "NO_OF_SEARCHES" : 5000,
+    "NO_ITERATIONS" : 100,
+    "SELF_PLAY_ITERATIONS" : 10,
+    "PARALLEL_PROCESS" : 5,
     "EPOCHS" : 4,
-    "BATCH_SIZE" : 10,
+    "BATCH_SIZE" : 2,
     "MODEL_CHECK_GAMES" : 80,
     
 }

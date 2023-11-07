@@ -67,17 +67,14 @@ class Alpha_MCTS:
     def search(self, state):
         root = Node(self.game, self.args, state, visits = 1)
 
-        if self.model.training:
+        if self.args["ROOT_RANDOMNESS"]:
             policy, _ = self.model(
                         torch.tensor(self.game.get_encoded_state(state), device = self.model.device
                     ).unsqueeze(0))
 
-
             policy = torch.softmax(policy, axis = 1).squeeze(0).cpu().numpy()
             
-            if self.args["ROOT_RANDOMNESS"]:
-                policy = (1 - self.args["DIRICHLET_EPSILON"]) * policy + self.args["DIRICHLET_EPSILON"] * np.random.dirichlet([self.args["DIRICHLET_ALPHA"]] * self.game.possible_state)
-
+            policy = (1 - self.args["DIRICHLET_EPSILON"]) * policy + self.args["DIRICHLET_EPSILON"] * np.random.dirichlet([self.args["DIRICHLET_ALPHA"]] * self.game.possible_state)
             
             valid_state = self.game.get_valid_moves(state)
             policy *= valid_state

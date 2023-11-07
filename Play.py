@@ -26,10 +26,10 @@ args = {
 
     "TEMPERATURE" : 1.25,
 
-    "NO_OF_SEARCHES" : 1200,
+    "NO_OF_SEARCHES" : 12,
     "EXPLORATION_CONSTANT" : 2,
     
-    "ROOT_RANDOMNESS": True
+    "ROOT_RANDOMNESS": False
 }
 
 
