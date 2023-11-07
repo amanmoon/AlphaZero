@@ -3,8 +3,8 @@ import numpy as np
 import torch
 
 from Alpha_MCTS import Alpha_MCTS
-from Games.ConnectFour.ConnectFour import ConnectFour
-from Games.ConnectFour.ConnectFourNN import ResNet
+from Games.TicTacToe.TicTacToe import TicTacToe
+from Games.TicTacToe.TicTacToeNN import ResNet
 
 from tqdm import trange   
     
@@ -74,19 +74,19 @@ def Arena(game, args, trained_model, untrained_model):
 
 
 args = {
-    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/ConnectFour/models_n_optimizers/",
+    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/TicTacToe/models_n_optimizers/",
 
     "ADVERSARIAL" : True,
 
     "TEMPERATURE" : 1,
 
-    "NO_OF_SEARCHES" : 20,
+    "NO_OF_SEARCHES" : 2,
     "EXPLORATION_CONSTANT" : 2,
-    "MODEL_CHECK_GAMES": 100
+    "MODEL_CHECK_GAMES": 1000
 }
 
 
-game = ConnectFour()
+game = TicTacToe()
 device = torch.device("cuda" if torch.cuda.is_available else "cpu")
 
 model1 = ResNet(game, 9, 128, device)

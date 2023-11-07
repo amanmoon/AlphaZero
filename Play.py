@@ -28,13 +28,15 @@ args = {
 
     "NO_OF_SEARCHES" : 1200,
     "EXPLORATION_CONSTANT" : 2,
+    
+    "TRAIN": False
 }
 
 
 game = ConnectFour()
 device = torch.device("cuda" if torch.cuda.is_available else "cpu")
 
-model = ResNet(game, 9, 128, device)
+model = ResNet(game, 12, 124, device)
 model.eval()
 
 path = args["MODEL_PATH"] + "model.pt"
@@ -69,7 +71,7 @@ finally:
             mcts_probs = mcts.search(neutral_state)
             print(mcts_probs)
             action = np.argmax(mcts_probs)
-            
+             
         state = game.make_move(state, action, player)
         
         is_terminal, value = game.know_terminal_value(state, action)

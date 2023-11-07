@@ -23,6 +23,7 @@ class GAME:
     def make_move(self, state, action, player):
         """NOTE: input a action and a state and a player, the 
         action is taken on given state and output is the final state"""
+        pass
     
     def get_encoded_state(self, state):
         """input a state the output should be the encoded state that will be
