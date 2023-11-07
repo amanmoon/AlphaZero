@@ -26,7 +26,7 @@ args = {
 
     "TEMPERATURE" : 1,
 
-    "NO_OF_SEARCHES" : 120,
+    "NO_OF_SEARCHES" : 1200,
     "EXPLORATION_CONSTANT" : 2,
     
     "TRAIN": False
@@ -36,7 +36,7 @@ args = {
 game = ConnectFour()
 device = torch.device("cuda" if torch.cuda.is_available else "cpu")
 
-model = ResNet(game, 9, 128, device)
+model = ResNet(game, 12, 124, device)
 model.eval()
 
 path = args["MODEL_PATH"] + "model.pt"
@@ -52,7 +52,7 @@ finally:
     mcts = Alpha_MCTS(game, args, model)
     
     state = game.initialise_state()
-    player = 1
+    player = -1
     
     while True:
         print(state)
@@ -71,7 +71,7 @@ finally:
             mcts_probs = mcts.search(neutral_state)
             print(mcts_probs)
             action = np.argmax(mcts_probs)
-            
+             
         state = game.make_move(state, action, player)
         
         is_terminal, value = game.know_terminal_value(state, action)

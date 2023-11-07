@@ -54,7 +54,6 @@ class Alpha_Zero:
                 for children in spg.root.children:
                     move_probability[children.action] = children.visits
                 prob = move_probability / np.sum(move_probability)
-
             
                 spg.memory.append((spg.root.state, move_probability, player))
 
@@ -217,10 +216,10 @@ class Alpha_Zero:
                 # print(Colors.GREEN + "Testing Completed" + Colors.WHITE + "\nTrained Model Stats:")
                 # print(Colors.GREEN, "Wins: ", wins, Colors.RESET, "|", Colors.RED, "Loss: ", defeats, Colors.RESET, "|", Colors.WHITE," Draw: ", draws, Colors.RESET)
                 
-            print(Colors.YELLOW + "Saving Model...")
-            torch.save(self.model.state_dict(), self.args["MODEL_PATH"] + "model.pt")
-            torch.save(self.optimizer.state_dict(), self.args["MODEL_PATH"] + "optimizer.pt")
-            print("Saved!" + Colors.RESET)
+                print(Colors.YELLOW + "Saving Model...")
+                torch.save(self.model.state_dict(), self.args["MODEL_PATH"] + "model.pt")
+                torch.save(self.optimizer.state_dict(), self.args["MODEL_PATH"] + "optimizer.pt")
+                print("Saved!" + Colors.RESET)
             
             
 class SPG:

@@ -73,7 +73,7 @@ class Alpha_MCTS:
 
         policy = torch.softmax(policy, axis = 1).cpu().numpy()
             
-        if self.args["TRAIN"]:
+        if self.args["ROOT_RANDOMNESS"]:
             policy = (1 - self.args["DIRICHLET_EPSILON"]) * policy + self.args["DIRICHLET_EPSILON"] * np.random.dirichlet([self.args["DIRICHLET_ALPHA"]] * self.game.possible_state, size = policy.shape[0])
             
         for i, spg in enumerate(spGames):
