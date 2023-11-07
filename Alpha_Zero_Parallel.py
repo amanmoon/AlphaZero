@@ -88,7 +88,7 @@ class Alpha_Zero:
         random.shuffle(memory)
         
         for batch_start in range(0, len(memory), self.args["BATCH_SIZE"]):
-            batch_end = min(len(memory) - 1, batch_start + self.args["BATCH_SIZE"])    
+            batch_end = batch_start + self.args["BATCH_SIZE"]    
                     
             training_memory = memory[batch_start : batch_end]
 

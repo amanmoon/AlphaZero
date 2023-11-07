@@ -21,8 +21,8 @@ args = {
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 600,
-    "NO_ITERATIONS" : 100,
+    "NO_OF_SEARCHES" : 2,
+    "NO_ITERATIONS" : 2,
     "SELF_PLAY_ITERATIONS" : 10,
     "PARALLEL_PROCESS" : 5,
     "EPOCHS" : 4,
