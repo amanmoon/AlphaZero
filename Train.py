@@ -21,12 +21,12 @@ args = {
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 2,
-    "NO_ITERATIONS" : 2,
-    "SELF_PLAY_ITERATIONS" : 10,
-    "PARALLEL_PROCESS" : 5,
+    "NO_OF_SEARCHES" : 2000,
+    "NO_ITERATIONS" : 200,
+    "SELF_PLAY_ITERATIONS" : 100,
+    "PARALLEL_PROCESS" : 100,
     "EPOCHS" : 4,
-    "BATCH_SIZE" : 2,
+    "BATCH_SIZE" : 20,
     "MODEL_CHECK_GAMES" : 80,
     
 }

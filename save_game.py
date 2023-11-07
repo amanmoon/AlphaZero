@@ -1,4 +1,4 @@
-from Alpha_Zero_Parallel import Alpha_Zero
+from Alpha_Zero import Alpha_Zero
 from Games.ConnectFour.ConnectFour import ConnectFour
 from Games.ConnectFour.ConnectFourNN import ResNet
 
@@ -44,10 +44,10 @@ def save_games(args, game, model, optimizer):
                 print(Colors.YELLOW + "Self Play" + Colors.RESET)
                 model.eval()
                 alpha_zero = Alpha_Zero(game, args, model, optimizer)
-                for _ in trange(args["SELF_PLAY_ITERATIONS"] // args["PARALLEL_PROCESS"]):
+                for _ in trange(args["SELF_PLAY_ITERATIONS"]):
                     memory = alpha_zero.self_play()          
                        
-                    with shelve.open( os.path.join(args["SAVE_GAME_PATH"], "data.pkl"), writeback=True) as db:
+                    with shelve.open( os.path.join(args["SAVE_GAME_PATH"], "games_1.pkl"), writeback=True) as db:
                         if "data" in db:
                             existing_data = db["data"]
                             existing_data.extend(memory)
@@ -61,21 +61,18 @@ args = {
 
     "EXPLORATION_CONSTANT" : 2,
 
-    "TEMPERATURE" : 1.25,
+    "TEMPERATURE" : 1.35,
 
     "DIRICHLET_EPSILON" : 0.25,
     "DIRICHLET_ALPHA" : 0.3,
-    "ROOT_RANDOMNESS": False,
+    "ROOT_RANDOMNESS": True,
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 2000,
+    "NO_OF_SEARCHES" : 20000,
     "NO_ITERATIONS" : 1,
-    "SELF_PLAY_ITERATIONS" : 10,
-    "PARALLEL_PROCESS" : 10,
-    "EPOCHS" : 4,
-    "BATCH_SIZE" : 2,
-    "MODEL_CHECK_GAMES" : 80,
+    "SELF_PLAY_ITERATIONS" : 20,
+    "PARALLEL_PROCESS" : 20,
     
 }
 
@@ -86,7 +83,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device, "in use")
 
 model = ResNet(game, 12, 124, device)
-model.train()
+model.eval()
 
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay = 0.0001)
 
