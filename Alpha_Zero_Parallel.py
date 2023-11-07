@@ -8,7 +8,6 @@ import torch.nn.functional as F
 from tqdm import trange  
 
 import copy
-import shelve
 
 class Colors:
     RESET = "\033[0m"
@@ -51,7 +50,7 @@ class Alpha_Zero:
                     move_probability[children.action] = children.visits
                 prob = move_probability / np.sum(move_probability)
             
-                spg.memory.append((spg.root.state, move_probability, player))
+                spg.memory.append((spg.root.state, prob, player))
 
                 temp_prob = prob ** (1 / self.args["TEMPERATURE"])
                 
@@ -70,7 +69,7 @@ class Alpha_Zero:
                             return_value = value if return_player == player else self.game.get_opponent_value(value)
                         else: 
                             return_value = value
-                            
+                        
                         return_memory.append((
                             self.game.get_encoded_state(return_state), 
                             return_action_prob, 

@@ -5,7 +5,7 @@ from Alpha_Zero_Parallel import Alpha_Zero
 import torch
 
 args = {
-    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/ConnectFour/models_n_optimizers/",
+    "MODEL_PATH" : "/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/ConnectFour/models_n_optimizers/",
 
     "EXPLORATION_CONSTANT" : 2,
 
