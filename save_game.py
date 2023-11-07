@@ -4,6 +4,7 @@ from Games.ConnectFour.ConnectFourNN import ResNet
 from tqdm import trange
 
 import shelve
+import os
 
 import torch
 
@@ -45,17 +46,17 @@ def save_games(args, game, model, optimizer):
                 for _ in trange(args["SELF_PLAY_ITERATIONS"] // args["PARALLEL_PROCESS"]):
                     memory = alpha_zero.self_play()          
                        
-                    with shelve.open( "data.pkl", writeback=True) as db:
+                    with shelve.open( os.path.join(args["SAVE_GAME_PATH"], "data.pkl"), writeback=True) as db:
                         if "data" in db:
                             existing_data = db["data"]
                             existing_data.extend(memory)
                         else:
                             db["data"] = memory
 
-
+GAME = "ConnectFour"
 args = {
-    "MODEL_PATH" : "/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/ConnectFour/models_n_optimizers/",
-    "SAVE_GAME_PATH" : "/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/ConnectFour/games/",
+    "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
+    "SAVE_GAME_PATH" :  os.path.join(os.getcwd(), "Games", GAME, "games"),
 
     "EXPLORATION_CONSTANT" : 2,
 

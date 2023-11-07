@@ -2,10 +2,12 @@ from Games.ConnectFour.ConnectFour import ConnectFour
 from Games.ConnectFour.ConnectFourNN import ResNet
 from Alpha_Zero_Parallel import Alpha_Zero
 
+import os
+
 import torch
 
 args = {
-    "MODEL_PATH" : "/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/ConnectFour/models_n_optimizers/",
+    "MODEL_PATH" : os.path.join(os.getcwd(), "Games", "ConnectFour", "models_n_optimizers"),
 
     "EXPLORATION_CONSTANT" : 2,
 

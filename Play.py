@@ -2,6 +2,7 @@ from Games.ConnectFour.ConnectFour import ConnectFour
 from Games.ConnectFour.ConnectFourNN import ResNet
 from Alpha_MCTS import Alpha_MCTS
 
+import os
 import numpy as np
 
 import torch
@@ -20,7 +21,7 @@ class Colors:
     
     
 args = {
-    "MODEL_PATH" : f"/home/adrinospy/Programming/Projects/AI ML/general_alpha_zero/Games/ConnectFour/models_n_optimizers/",
+    "MODEL_PATH" : os.path.join(os.getcwd(), "Games", "ConnectFour", "models_n_optimizers"),
 
     "ADVERSARIAL" : True,
 
@@ -39,7 +40,7 @@ device = torch.device("cuda" if torch.cuda.is_available else "cpu")
 model = ResNet(game, 12, 124, device)
 model.eval()
 
-path = args["MODEL_PATH"] + "model.pt"
+path = os.path.join(args["MODEL_PATH"], "model.pt")
 
 try:
     model.load_state_dict(torch.load(path))

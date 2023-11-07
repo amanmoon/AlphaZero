@@ -1,6 +1,8 @@
 from Alpha_MCTS import Alpha_MCTS 
+
 import numpy as np
 import random
+import os
 
 import torch
 import torch.nn.functional as F
@@ -160,8 +162,8 @@ class Alpha_Zero:
         
     def learn(self):
         try:
-            model_path = self.args["MODEL_PATH"] + 'model.pt'
-            optimizer_path = self.args["MODEL_PATH"] + 'optimizer.pt'
+            model_path = os.path.join(self.args["MODEL_PATH"], 'model.pt')
+            optimizer_path = os.path.join(self.args["MODEL_PATH"], 'optimizer.pt')
 
             self.model.load_state_dict(torch.load(model_path))
             self.optimizer.load_state_dict(torch.load(optimizer_path))
@@ -198,6 +200,6 @@ class Alpha_Zero:
                 print(Colors.GREEN, "Wins: ", wins, Colors.RESET, "|", Colors.RED, "Loss: ", defeats, Colors.RESET, "|", Colors.WHITE," Draw: ", draws, Colors.RESET)
                 
             print(Colors.YELLOW + "Saving Model...")
-            torch.save(self.model.state_dict(), self.args["MODEL_PATH"] + "model.pt")
-            torch.save(self.optimizer.state_dict(), self.args["MODEL_PATH"] + "optimizer.pt")
+            torch.save(self.model.state_dict(), os.path.join(self.args["MODEL_PATH"], "model.pt"))
+            torch.save(self.optimizer.state_dict(), os.path.join(self.args["MODEL_PATH"], "optimizer.pt"))
             print("Saved!" + Colors.RESET)
