@@ -24,7 +24,7 @@ args = {
 
     "ADVERSARIAL" : True,
 
-    "TEMPERATURE" : 1,
+    "TEMPERATURE" : 1.25,
 
     "NO_OF_SEARCHES" : 1200,
     "EXPLORATION_CONSTANT" : 2,
