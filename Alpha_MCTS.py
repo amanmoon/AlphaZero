@@ -75,7 +75,9 @@ class Alpha_MCTS:
 
             policy = torch.softmax(policy, axis = 1).squeeze(0).cpu().numpy()
             
-            policy = (1 - self.args["DIRICHLET_EPSILON"]) * policy + self.args["DIRICHLET_EPSILON"] * np.random.dirichlet([self.args["DIRICHLET_ALPHA"]] * self.game.possible_state)
+            if self.args["ROOT_RANDOMNESS"]:
+                policy = (1 - self.args["DIRICHLET_EPSILON"]) * policy + self.args["DIRICHLET_EPSILON"] * np.random.dirichlet([self.args["DIRICHLET_ALPHA"]] * self.game.possible_state)
+
             
             valid_state = self.game.get_valid_moves(state)
             policy *= valid_state

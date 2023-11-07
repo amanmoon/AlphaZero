@@ -29,7 +29,7 @@ args = {
     "NO_OF_SEARCHES" : 1200,
     "EXPLORATION_CONSTANT" : 2,
     
-    "TRAIN": False
+    "ROOT_RANDOMNESS": True
 }
 
 
