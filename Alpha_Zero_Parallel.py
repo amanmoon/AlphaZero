@@ -39,7 +39,6 @@ class Alpha_Zero:
         spGames = [SPG(self.game) for _ in range(self.args["PARALLEL_PROCESS"])]
         
         while len(spGames) > 0:
-            print(len(spGames))
             states = np.stack([spg.state for spg in spGames])
             neutral_states = self.game.change_perspective(states, player) if self.args["ADVERSARIAL"] else states
             self.mcts.search(neutral_states, spGames)
