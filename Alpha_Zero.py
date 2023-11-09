@@ -184,6 +184,7 @@ class Alpha_Zero:
                 
                 print(Colors.YELLOW + "Self Play" + Colors.RESET)
                 self.model.eval()
+                
                 for _ in trange(self.args["SELF_PLAY_ITERATIONS"]):
                     memory += self.self_play()
                     

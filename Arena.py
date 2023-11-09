@@ -1,7 +1,7 @@
 
 from Alpha_MCTS import Alpha_MCTS
-from Games.TicTacToe.TicTacToe import TicTacToe
-from Games.TicTacToe.TicTacToeNN import ResNet
+from Games.ConnectFour.ConnectFour import ConnectFour
+from Games.ConnectFour.ConnectFourNN import ResNet
 
 import numpy as np
 import os
@@ -79,27 +79,27 @@ args = {
     "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
 
     "ADVERSARIAL" : True,
+    "ROOT_RANDOMNESS": False,
 
-    "TEMPERATURE" : 1,
+    "TEMPERATURE" : 1.25,
 
-    "NO_OF_SEARCHES" : 2,
+    "NO_OF_SEARCHES" : 500,
     "EXPLORATION_CONSTANT" : 2,
-    "MODEL_CHECK_GAMES": 1000
+    "MODEL_CHECK_GAMES": 10
 }
 
 
-game = TicTacToe()
+game = ConnectFour()
 device = torch.device("cuda" if torch.cuda.is_available else "cpu")
 
-model1 = ResNet(game, 9, 128, device)
+model1 = ResNet(game, 5, 10, device)
 model1.eval()
 
-model2 = ResNet(game, 9, 128, device)
+model2 = ResNet(game, 20, 124, device)
 model2.eval()
  
     
-model1.load_state_dict(torch.load(os.path.join(args["MODEL_PATH"], "model1.pt")))
-model2.load_state_dict(torch.load(os.path.join(args["MODEL_PATH"], "model2.pt")))
+model1.load_state_dict(torch.load(os.path.join(args["MODEL_PATH"], "model.pt")))
+model2.load_state_dict(torch.load(os.path.join(args["MODEL_PATH"], "model1.pt")))
 
 print(Arena(game, args, model1, model2))
-

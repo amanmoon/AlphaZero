@@ -10,7 +10,8 @@ GAME = "ConnectFour"
 
 args = {
     "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
-
+    "SAVE_GAME_PATH" :  os.path.join(os.getcwd(), "Games", GAME, "games"),
+    
     "EXPLORATION_CONSTANT" : 2,
 
     "TEMPERATURE" : 1.25,
@@ -21,19 +22,21 @@ args = {
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 2000,
-    "NO_ITERATIONS" : 200,
-    "SELF_PLAY_ITERATIONS" : 100,
+    "NO_OF_SEARCHES" : 5000,
+    "NO_ITERATIONS" : 3,
+    "SELF_PLAY_ITERATIONS" : 500,
     "PARALLEL_PROCESS" : 100,
     "EPOCHS" : 4,
-    "BATCH_SIZE" : 20,
+    "BATCH_SIZE" : 100,
     "MODEL_CHECK_GAMES" : 80,
+    "WIN_RATIO_FOR_SAVING": 0.6,
     
 }
 
 
 game = ConnectFour()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 print(device, "in use")
 
 model = ResNet(game, 12, 124, device)
