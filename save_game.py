@@ -23,8 +23,8 @@ class Colors:
 
 def save_games(args, game, model, optimizer):
         try:
-            model_path = os.path.join(args["MODEL_PATH"], 'model.pt')
-            optimizer_path = os.path.join(args["MODEL_PATH"], 'optimizer.pt')
+            model_path = os.path.join(args["MODEL_PATH"], 'model_9_128.pt')
+            optimizer_path = os.path.join(args["MODEL_PATH"], 'optimizer_9_128.pt')
 
             model.load_state_dict(torch.load(model_path))
             optimizer.load_state_dict(torch.load(optimizer_path))
@@ -47,7 +47,7 @@ def save_games(args, game, model, optimizer):
                 for _ in trange(args["SELF_PLAY_ITERATIONS"] // args["PARALLEL_PROCESS"]):
                     memory = alpha_zero.self_play()          
                        
-                with shelve.open( os.path.join(args["SAVE_GAME_PATH"], "games_2.pkl"), writeback=True) as db:
+                with shelve.open( os.path.join(args["SAVE_GAME_PATH"], "games_5000_2.pkl"), writeback=True) as db:
                     if "data" in db:
                         existing_data = db["data"]
                         existing_data.extend(memory)
@@ -69,7 +69,7 @@ args = {
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 5000,
+    "NO_OF_SEARCHES" : 6000,
     "NO_ITERATIONS" : 100,
     "SELF_PLAY_ITERATIONS" : 100,
     "PARALLEL_PROCESS" : 50,
@@ -82,7 +82,7 @@ game = ConnectFour()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device, "in use")
 
-model = ResNet(game, 20, 124, device)
+model = ResNet(game, 9, 128, device)
 model.eval()
 
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay = 0.0001)

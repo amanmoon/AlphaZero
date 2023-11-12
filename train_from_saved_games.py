@@ -52,8 +52,8 @@ def train(args, model, optimizer, memory):
 
 def train_from_saved_data(args, model, optimizer, memory):
     try:
-        model_path = os.path.join(args["MODEL_PATH"], 'model1.pt')
-        optimizer_path = os.path.join(args["MODEL_PATH"], 'optimizer1.pt')
+        model_path = os.path.join(args["MODEL_PATH"], 'model_9_128.pt')
+        optimizer_path = os.path.join(args["MODEL_PATH"], 'optimizer_9_128.pt')
 
         model.load_state_dict(torch.load(model_path))
         optimizer.load_state_dict(torch.load(optimizer_path))
@@ -79,25 +79,8 @@ GAME = "ConnectFour"
 
 args = {
     "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
-
-    "EXPLORATION_CONSTANT" : 2,
-
-    "TEMPERATURE" : 1.25,
-
-    "DIRICHLET_EPSILON" : 0.25,
-    "DIRICHLET_ALPHA" : 0.3,
-    "ROOT_RANDOMNESS": True,
-
-    "ADVERSARIAL" : True,
-
-    "NO_OF_SEARCHES" : 2000,
-    "NO_ITERATIONS" : 200,
-    "SELF_PLAY_ITERATIONS" : 100,
-    "PARALLEL_PROCESS" : 100,
-    "EPOCHS" : 6,
-    "BATCH_SIZE" : 20,
-    "MODEL_CHECK_GAMES" : 80,
-    
+    "EPOCHS" : 4,
+    "BATCH_SIZE" : 100,
 }
 
 
@@ -105,15 +88,15 @@ game = ConnectFour()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device, "in use")
 
-SAVE_GAME_PATH =  os.path.join(os.getcwd(), "Games", GAME, "games", "games_0.pkl")
+SAVE_GAME_PATH =  os.path.join(os.getcwd(), "Games", GAME, "games", "games_5000_1.pkl")
 
 with shelve.open(SAVE_GAME_PATH) as db:
     if "data" in db:
         memory = db["data"]
 
-model = ResNet(game, 12, 124, device)
-model.eval()
+model = ResNet(game, 9, 128, device)
+model.train()
 
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay = 0.0005)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay = 0.0001)
 
 train_from_saved_data(args, model, optimizer, memory)

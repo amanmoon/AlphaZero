@@ -57,9 +57,7 @@ class Alpha_Zero:
 
                 temp_prob = prob ** (1 / self.args["TEMPERATURE"])
                 
-                temp_prob[temp_prob == 0] = - np.inf
-                        
-                temp_prob = torch.softmax(torch.tensor(temp_prob), axis = 0).cpu().numpy()
+                temp_prob /= np.sum(temp_prob)
 
                 move = np.random.choice(self.game.possible_state, p = temp_prob)
         
@@ -113,8 +111,8 @@ class Alpha_Zero:
         
     def learn(self):
         try:
-            model_path = os.path.join(self.args["MODEL_PATH"], 'model.pt')
-            optimizer_path = os.path.join(self.args["MODEL_PATH"], 'optimizer.pt')
+            model_path = os.path.join(self.args["MODEL_PATH"], 'model_9_128.pt')
+            optimizer_path = os.path.join(self.args["MODEL_PATH"], 'optimizer_9_128.pt')
 
             self.model.load_state_dict(torch.load(model_path))
             self.optimizer.load_state_dict(torch.load(optimizer_path))
@@ -143,21 +141,24 @@ class Alpha_Zero:
                 self.model.train()
                 for _ in trange(self.args["EPOCHS"]):
                     self.train(memory)
-                    
                 
                 print(Colors.YELLOW + "Testing..." + Colors.RESET)
                 self.model.eval()
+                initial_model.eval()
                 wins, draws, defeats = Arena(self.game, self.args, self.model, initial_model)
 
-                if wins / self.args["MODEL_CHECK_GAMES"] <= self.args["WIN_RATIO_FOR_SAVING"]:
-                    self.model = initial_model
-                                     
                 print(Colors.GREEN + "Testing Completed" + Colors.WHITE + "\nTrained Model Stats:")
                 print(Colors.GREEN, "Wins: ", wins, Colors.RESET, "|", Colors.RED, "Loss: ", defeats, Colors.RESET, "|", Colors.WHITE," Draw: ", draws, Colors.RESET)
-                
+
+                if ((wins) / self.args["MODEL_CHECK_GAMES"]) <= self.args["WIN_RATIO_FOR_SAVING"]:
+                    print(Colors.RED, "Rejecting New Model", Colors.RESET)
+                    self.model = initial_model
+                else:
+                    print(Colors.GREEN, "Accepting New Model", Colors.RESET)
+                                     
                 print(Colors.YELLOW + "Saving Model...")
-                torch.save(self.model.state_dict(), os.path.join(self.args["MODEL_PATH"], "model.pt"))
-                torch.save(self.optimizer.state_dict(), os.path.join(self.args["MODEL_PATH"], "optimizer.pt"))
+                torch.save(self.model.state_dict(), os.path.join(self.args["MODEL_PATH"], "model_9_128.pt"))
+                torch.save(self.optimizer.state_dict(), os.path.join(self.args["MODEL_PATH"], "optimizer_9_128.pt"))
                 print("Saved!" + Colors.RESET)
             
             

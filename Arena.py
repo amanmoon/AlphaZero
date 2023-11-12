@@ -22,7 +22,7 @@ def Arena(game, args, trained_model, untrained_model):
     run = True
     for i in trange(args["MODEL_CHECK_GAMES"]):
         
-        if i > args["MODEL_CHECK_GAMES"] // 2 and run:
+        if i > (args["MODEL_CHECK_GAMES"] // 2) and run:
             temp = model_2
             model_2 = model_1
             model_1 = temp
@@ -84,13 +84,13 @@ def main(args, model_1, model_2):
     game = ConnectFour()
     device = torch.device("cuda" if torch.cuda.is_available else "cpu")
     
-    model1 = ResNet(game, 12, 124, device)
+    model1 = ResNet(game, 9, 128, device)
     model1.eval()
     model1.load_state_dict(torch.load(os.path.join(args["MODEL_PATH"], model_1)))
     
-    model2 = ResNet(game, 20, 124, device)
+    model2 = ResNet(game, 9, 128, device)
     model2.eval()
-    # model2.load_state_dict(torch.load(os.path.join(args["MODEL_PATH"], model_2)))
+    model2.load_state_dict(torch.load(os.path.join(args["MODEL_PATH"], model_2)))
     
         
     
@@ -106,8 +106,9 @@ if __name__ == "__main__":
 
         "TEMPERATURE" : 1.25,
 
-        "NO_OF_SEARCHES" : 100,
+        "NO_OF_SEARCHES" : 120,
         "EXPLORATION_CONSTANT" : 2,
-        "MODEL_CHECK_GAMES": 10
+        "MODEL_CHECK_GAMES": 20
     }
-    main(args, "model.pt", "model1.pt")
+    
+    main(args, "model.pt", "model_9_128.pt")

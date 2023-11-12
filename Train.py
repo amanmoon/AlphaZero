@@ -11,24 +11,24 @@ GAME = "ConnectFour"
 args = {
     "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
     "SAVE_GAME_PATH" :  os.path.join(os.getcwd(), "Games", GAME, "games"),
-    
-    "EXPLORATION_CONSTANT" : 2,
 
-    "TEMPERATURE" : 1.25,
+    "EXPLORATION_CONSTANT" : 2.5,
 
-    "DIRICHLET_EPSILON" : 0.25,
-    "DIRICHLET_ALPHA" : 0.3,
+    "TEMPERATURE" : 1.5,
+
+    "DIRICHLET_EPSILON" : 0.4,
+    "DIRICHLET_ALPHA" : 0.5,
     "ROOT_RANDOMNESS": True,
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 100,
-    "NO_ITERATIONS" : 10,
+    "NO_OF_SEARCHES" : 1000,
+    "NO_ITERATIONS" : 100,
     "SELF_PLAY_ITERATIONS" : 1000,
-    "PARALLEL_PROCESS" : 1000,
+    "PARALLEL_PROCESS" : 100,
     "EPOCHS" : 4,
-    "BATCH_SIZE" : 100,
-    "MODEL_CHECK_GAMES" : 80,
+    "BATCH_SIZE" : 128,
+    "MODEL_CHECK_GAMES" : 25,
     "WIN_RATIO_FOR_SAVING": 0.6,
     
 }
@@ -39,8 +39,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 print(device, "in use")
 
-model = ResNet(game, 12, 124, device)
-model.train()
+model = ResNet(game, 9, 128, device)
 
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay = 0.0001)
 

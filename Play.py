@@ -27,7 +27,7 @@ args = {
 
     "TEMPERATURE" : 1.25,
 
-    "NO_OF_SEARCHES" : 100000,
+    "NO_OF_SEARCHES" : 1200,
     "EXPLORATION_CONSTANT" : 2,
     
     "ROOT_RANDOMNESS": False
@@ -37,10 +37,10 @@ args = {
 game = ConnectFour()
 device = torch.device("cuda" if torch.cuda.is_available else "cpu")
 
-model = ResNet(game, 12, 124, device)
+model = ResNet(game, 9, 128, device)
 model.eval()
 
-path = os.path.join(args["MODEL_PATH"], "model.pt")
+path = os.path.join(args["MODEL_PATH"], "model_9_128.pt")
 
 try:
     model.load_state_dict(torch.load(path))
@@ -66,11 +66,15 @@ finally:
             if valid_moves[action] == 0:
                 print("action not valid")
                 continue
+            _, value = model(torch.tensor(game.get_encoded_state(state), device = device).unsqueeze(0))
+            print(Colors.GREEN, "Value:", Colors.RESET, value.item())
                 
         else:
             neutral_state = game.change_perspective(state, player)
             mcts_probs = mcts.search(neutral_state)
             print(mcts_probs)
+            _, value = model(torch.tensor(game.get_encoded_state(neutral_state), device = device).unsqueeze(0))
+            print(Colors.GREEN, "Value:", Colors.RESET, player * value.item())
             action = np.argmax(mcts_probs)
              
         state = game.make_move(state, action, player)
@@ -84,5 +88,5 @@ finally:
             else:
                 print("draw")
             break
-    
+
         player = game.get_opponent(player)
