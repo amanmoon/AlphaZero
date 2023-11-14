@@ -23,7 +23,7 @@ class Colors:
 
 def save_games(args, game, model, optimizer):
         try:
-            model_path = os.path.join(args["MODEL_PATH"], 'model_9_128.pt')
+            model_path = os.path.join(args["MODEL_PATH"], 'model1.pt')
             optimizer_path = os.path.join(args["MODEL_PATH"], 'optimizer_9_128.pt')
 
             model.load_state_dict(torch.load(model_path))
@@ -46,8 +46,8 @@ def save_games(args, game, model, optimizer):
                 alpha_zero = Alpha_Zero(game, args, model, optimizer)
                 for _ in trange(args["SELF_PLAY_ITERATIONS"] // args["PARALLEL_PROCESS"]):
                     memory = alpha_zero.self_play()          
-                       
-                with shelve.open( os.path.join(args["SAVE_GAME_PATH"], "games_5000_2.pkl"), writeback=True) as db:
+                    
+                with shelve.open( os.path.join(args["SAVE_GAME_PATH"], "games_5000_3.pkl"), writeback=True) as db:
                     if "data" in db:
                         existing_data = db["data"]
                         existing_data.extend(memory)
@@ -72,7 +72,7 @@ args = {
     "NO_OF_SEARCHES" : 6000,
     "NO_ITERATIONS" : 100,
     "SELF_PLAY_ITERATIONS" : 100,
-    "PARALLEL_PROCESS" : 50,
+    "PARALLEL_PROCESS" : 100,
     
 }
 

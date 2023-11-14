@@ -24,13 +24,13 @@ args = {
     "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
 
     "ADVERSARIAL" : True,
+    "ROOT_RANDOMNESS": False,
 
-    "TEMPERATURE" : 1.25,
+    "TEMPERATURE" : 1,
 
-    "NO_OF_SEARCHES" : 1200,
+    "NO_OF_SEARCHES" : 120,
     "EXPLORATION_CONSTANT" : 2,
     
-    "ROOT_RANDOMNESS": False
 }
 
 
@@ -68,6 +68,7 @@ finally:
                 continue
             _, value = model(torch.tensor(game.get_encoded_state(state), device = device).unsqueeze(0))
             print(Colors.GREEN, "Value:", Colors.RESET, value.item())
+            
                 
         else:
             neutral_state = game.change_perspective(state, player)

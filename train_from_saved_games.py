@@ -80,7 +80,7 @@ GAME = "ConnectFour"
 args = {
     "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
     "EPOCHS" : 4,
-    "BATCH_SIZE" : 100,
+    "BATCH_SIZE" : 1000,
 }
 
 
@@ -88,7 +88,7 @@ game = ConnectFour()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device, "in use")
 
-SAVE_GAME_PATH =  os.path.join(os.getcwd(), "Games", GAME, "games", "games_5000_1.pkl")
+SAVE_GAME_PATH =  os.path.join(os.getcwd(), "Games", GAME, "games", "games_5000_2.pkl")
 
 with shelve.open(SAVE_GAME_PATH) as db:
     if "data" in db:

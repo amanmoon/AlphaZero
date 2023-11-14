@@ -81,6 +81,7 @@ def Arena(game, args, trained_model, untrained_model):
 
 
 def main(args, model_1, model_2):
+    print("Betting", model_1, "with", model_2)
     game = ConnectFour()
     device = torch.device("cuda" if torch.cuda.is_available else "cpu")
     
@@ -92,8 +93,6 @@ def main(args, model_1, model_2):
     model2.eval()
     model2.load_state_dict(torch.load(os.path.join(args["MODEL_PATH"], model_2)))
     
-        
-    
     print(Arena(game, args, model1, model2))
     
 if __name__ == "__main__":
@@ -104,11 +103,11 @@ if __name__ == "__main__":
         "ADVERSARIAL" : True,
         "ROOT_RANDOMNESS": False,
 
-        "TEMPERATURE" : 1.25,
+        "TEMPERATURE" : 1,
 
         "NO_OF_SEARCHES" : 120,
         "EXPLORATION_CONSTANT" : 2,
-        "MODEL_CHECK_GAMES": 20
+        "MODEL_CHECK_GAMES": 10
     }
     
-    main(args, "model.pt", "model_9_128.pt")
+    main(args, "model_9_128.pt", "model.pt")

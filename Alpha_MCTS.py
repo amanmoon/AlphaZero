@@ -33,7 +33,7 @@ class Node:
         if child.visits == 0:
             q_value = 0
         else:
-            q_value = 1 - ((child.value / child.visits) + 1) / 2
+            q_value = 1 - (((child.value / child.visits) + 1) / 2)
             
         return q_value + self.args['EXPLORATION_CONSTANT'] * (math.sqrt(self.visits) / (child.visits + 1)) * child.prob
     

@@ -12,24 +12,24 @@ args = {
     "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
     "SAVE_GAME_PATH" :  os.path.join(os.getcwd(), "Games", GAME, "games"),
 
-    "EXPLORATION_CONSTANT" : 2.5,
+    "EXPLORATION_CONSTANT" : 2,
 
-    "TEMPERATURE" : 1.5,
+    "TEMPERATURE" : 1.25,
 
-    "DIRICHLET_EPSILON" : 0.4,
-    "DIRICHLET_ALPHA" : 0.5,
+    "DIRICHLET_EPSILON" : 0.25,
+    "DIRICHLET_ALPHA" : 0.03,
     "ROOT_RANDOMNESS": True,
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 1000,
+    "NO_OF_SEARCHES" : 800,
     "NO_ITERATIONS" : 100,
     "SELF_PLAY_ITERATIONS" : 1000,
     "PARALLEL_PROCESS" : 100,
-    "EPOCHS" : 4,
+    "EPOCHS" : 6,
     "BATCH_SIZE" : 128,
     "MODEL_CHECK_GAMES" : 25,
-    "WIN_RATIO_FOR_SAVING": 0.6,
+    "WIN_RATIO_FOR_SAVING": 0.5,
     
 }
 
