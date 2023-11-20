@@ -1,8 +1,10 @@
 # General Alpha_Zero
 
 ## Table of Contents
-- [About](#about)
-- [Installation](##installation)
+- [Features](#features)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Install Dependencies](#install dependencies)
 - [Usage](#usage)
 
 ## Overview
@@ -15,13 +17,16 @@ This project implements a game-playing agent based on the AlphaZero algorithm, i
 - Neural Network: Implements a neural network for the game-playing policy and value estimation.
 - Reinforcement Learning: Utilizes reinforcement learning techniques for training the agent.
 - Game Environment: Support for multiple game environments (TicTacToe, ConnectFour, etc.).
+- Data Creation: Create and Save game data for model to be trained on. 
 
 ## Installation
+#### Prerequisites
+Make sure you are running python version of 3.8 - 3.11
 
+#### Install Dependencies
 1. Clone the repository: `git clone https://github.com/amanmoon/general_alpha_zero.git`
 2. Navigate to the project directory: `cd general_alpha_zero`
-3. Make sure you have python 3.8 - 3.11 installed.
-4. Install dependencies: `pip install -r requirements.txt`
+3. Install dependencies: `pip install -r requirements.txt`
 
 ## Usage
 
