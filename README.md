@@ -4,7 +4,7 @@
 - [Features](#features)
 - [Installation](#installation)
   - [Prerequisites](#prerequisites)
-  - [Install Dependencies](#install dependencies)
+  - [Install Dependencies](#install-dependencies)
 - [Usage](#usage)
 
 ## Overview
