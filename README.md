@@ -1,4 +1,13 @@
 # General Alpha_Zero
+## Overview
+
+This project implements a game-playing agent based on the AlphaZero algorithm, inspired by the DeepMind paper "Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm". The agent is designed to play games with itself and learn through reinforcement learning. The agent generates data based on modified MCTS tree search algorithm and trains itself on the generated data.
+
+## Research Paper
+- [Google DeepMind](https://deepmind.google/)
+- [Mastering the game of Go without human knowledge](https://www.nature.com/articles/nature24270)
+- [Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm](https://arxiv.org/abs/1712.01815)
+- [Human-level control through deep reinforcement learning](https://www.nature.com/articles/nature14236)
 
 ## Table of Contents
 - [Features](#features)
@@ -6,10 +15,6 @@
   - [Prerequisites](#prerequisites)
   - [Install Dependencies](#install-dependencies)
 - [Usage](#usage)
-
-## Overview
-
-This project implements a game-playing agent based on the AlphaZero algorithm, inspired by the DeepMind paper ["Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm"](https://arxiv.org/abs/1712.01815). The agent is designed to play games with itself and learn through reinforcement learning. The agent generates data based on modified MCTS tree search algorithm and trains itself on the generated data.
 
 ## Features
 
@@ -21,7 +26,7 @@ This project implements a game-playing agent based on the AlphaZero algorithm, i
 
 ## Installation
 #### Prerequisites
-Make sure you are running python version of 3.8 - 3.11
+Make sure you are running python version of 3.8 - 3.11.
 
 #### Install Dependencies
 1. Clone the repository: `git clone https://github.com/amanmoon/general_alpha_zero.git`
@@ -48,3 +53,5 @@ Make sure you are running python version of 3.8 - 3.11
   1. Choose Models you wish to bet against each other inside the Arena file.
   2. To run the Arena Script: `python3 Arena.py`
   
+## Contact
+For questions or suggestions, feel free to reach out at amanmoon099@gmail.com.
