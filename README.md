@@ -1,4 +1,4 @@
-# General Alpha_Zero
+# General AlphaZero
 ## Overview
 
 This project implements a game-playing agent based on the AlphaZero algorithm, inspired by the DeepMind paper "Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm". The agent is designed to play games with itself and learn through reinforcement learning. The agent generates data based on modified MCTS tree search algorithm and trains itself on the generated data.
