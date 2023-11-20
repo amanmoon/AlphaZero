@@ -31,13 +31,11 @@ def Arena(game, args, trained_model, untrained_model):
         state = game.initialise_state()
         player = 1
         
-        # move = np.random.choice(game.possible_state, p = model_1.search(state))4
         move = np.argmax(model_1.search(state))
         game.make_move(state, move, player)
         
         while True:
             neutral_state = game.change_perspective(state, player)
-            # move = np.random.choice(game.possible_state, p = model_2.search(neutral_state))
             move = np.argmax(model_2.search(neutral_state))
             
             if args["ADVERSARIAL"]:
@@ -60,7 +58,6 @@ def Arena(game, args, trained_model, untrained_model):
             if args["ADVERSARIAL"]:
                 player = game.get_opponent(player)
 
-            # move = np.random.choice(game.possible_state, p = model_1.search(state))
             move = np.argmax(model_1.search(state))
             game.make_move(state, move, player)
             
@@ -106,8 +103,8 @@ if __name__ == "__main__":
         "TEMPERATURE" : 1,
 
         "NO_OF_SEARCHES" : 120,
-        "EXPLORATION_CONSTANT" : 2,
+        "EXPLORATION_CONSTANT" : 3,
         "MODEL_CHECK_GAMES": 10
     }
     
-    main(args, "model_9_128.pt", "model.pt")
+    main(args, "model_.pt", "model.pt")

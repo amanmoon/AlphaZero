@@ -4,7 +4,6 @@ from Alpha_MCTS import Alpha_MCTS
 
 import os
 import numpy as np
-
 import torch
 
 
@@ -28,8 +27,8 @@ args = {
 
     "TEMPERATURE" : 1,
 
-    "NO_OF_SEARCHES" : 120,
-    "EXPLORATION_CONSTANT" : 2,
+    "NO_OF_SEARCHES" : 1200,
+    "EXPLORATION_CONSTANT" : 1,
     
 }
 
@@ -40,7 +39,7 @@ device = torch.device("cuda" if torch.cuda.is_available else "cpu")
 model = ResNet(game, 9, 128, device)
 model.eval()
 
-path = os.path.join(args["MODEL_PATH"], "model_9_128.pt")
+path = os.path.join(args["MODEL_PATH"], "model_.pt")
 
 try:
     model.load_state_dict(torch.load(path))
@@ -66,16 +65,11 @@ finally:
             if valid_moves[action] == 0:
                 print("action not valid")
                 continue
-            _, value = model(torch.tensor(game.get_encoded_state(state), device = device).unsqueeze(0))
-            print(Colors.GREEN, "Value:", Colors.RESET, value.item())
             
-                
         else:
             neutral_state = game.change_perspective(state, player)
             mcts_probs = mcts.search(neutral_state)
-            print(mcts_probs)
-            _, value = model(torch.tensor(game.get_encoded_state(neutral_state), device = device).unsqueeze(0))
-            print(Colors.GREEN, "Value:", Colors.RESET, player * value.item())
+            print(Colors.GREEN, "MCTS Move Probabilities:", Colors.RESET,mcts_probs )
             action = np.argmax(mcts_probs)
              
         state = game.make_move(state, action, player)

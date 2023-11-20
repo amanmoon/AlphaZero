@@ -71,14 +71,12 @@ class Alpha_MCTS:
                         torch.tensor(self.game.get_encoded_state(states), device = self.model.device
                     ))
 
-
         policy = torch.softmax(policy, axis = 1).cpu().numpy()
             
         if self.args["ROOT_RANDOMNESS"]:
             policy = (1 - self.args["DIRICHLET_EPSILON"]) * policy + self.args["DIRICHLET_EPSILON"] * np.random.dirichlet([self.args["DIRICHLET_ALPHA"]] * self.game.possible_state, size = policy.shape[0])
             
         for i, spg in enumerate(spGames):
-                
             spg_policy = policy[i]
             valid_state = self.game.get_valid_moves(states[i])
             spg_policy *= valid_state

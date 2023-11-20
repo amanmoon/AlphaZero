@@ -52,8 +52,8 @@ def train(args, model, optimizer, memory):
 
 def train_from_saved_data(args, model, optimizer, memory):
     try:
-        model_path = os.path.join(args["MODEL_PATH"], 'model_9_128.pt')
-        optimizer_path = os.path.join(args["MODEL_PATH"], 'optimizer_9_128.pt')
+        model_path = os.path.join(args["MODEL_PATH"], 'model_.pt')
+        optimizer_path = os.path.join(args["MODEL_PATH"], 'optimizer_.pt')
 
         model.load_state_dict(torch.load(model_path))
         optimizer.load_state_dict(torch.load(optimizer_path))
@@ -70,8 +70,8 @@ def train_from_saved_data(args, model, optimizer, memory):
             train(args, model, optimizer, memory)
             
         print(Colors.YELLOW + "Saving Model...")
-        torch.save(model.state_dict(), os.path.join(args["MODEL_PATH"], "model.pt"))
-        torch.save(optimizer.state_dict(), os.path.join(args["MODEL_PATH"], "optimizer.pt"))
+        torch.save(model.state_dict(), os.path.join(args["MODEL_PATH"], "model_.pt"))
+        torch.save(optimizer.state_dict(), os.path.join(args["MODEL_PATH"], "optimizer_.pt"))
         print("Saved!" + Colors.RESET)
 
 
@@ -80,7 +80,7 @@ GAME = "ConnectFour"
 args = {
     "MODEL_PATH" : os.path.join(os.getcwd(), "Games", GAME, "models_n_optimizers"),
     "EPOCHS" : 4,
-    "BATCH_SIZE" : 1000,
+    "BATCH_SIZE" : 124,
 }
 
 
@@ -88,7 +88,7 @@ game = ConnectFour()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device, "in use")
 
-SAVE_GAME_PATH =  os.path.join(os.getcwd(), "Games", GAME, "games", "games_5000_2.pkl")
+SAVE_GAME_PATH =  os.path.join(os.getcwd(), "Games", GAME, "games", "games_6.pkl")
 
 with shelve.open(SAVE_GAME_PATH) as db:
     if "data" in db:

@@ -84,9 +84,10 @@ class Alpha_MCTS:
         
         for _ in range(self.args["NO_OF_SEARCHES"]):
             node = root
-                
+            no_moves = 0
             while node.leaf_or_not():
                 node = node.search()
+                no_moves += 1
               
             is_terminal, value = self.game.know_terminal_value(node.state, node.action)
             

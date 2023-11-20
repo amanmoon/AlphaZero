@@ -14,23 +14,22 @@ args = {
 
     "EXPLORATION_CONSTANT" : 2,
 
-    "TEMPERATURE" : 1.25,
+    "TEMPERATURE" : 2,
 
     "DIRICHLET_EPSILON" : 0.25,
-    "DIRICHLET_ALPHA" : 0.03,
+    "DIRICHLET_ALPHA" : 0.3,
     "ROOT_RANDOMNESS": True,
 
     "ADVERSARIAL" : True,
 
-    "NO_OF_SEARCHES" : 800,
-    "NO_ITERATIONS" : 100,
-    "SELF_PLAY_ITERATIONS" : 1000,
+    "NO_OF_SEARCHES" : 8000,
+    "NO_ITERATIONS" : 3,
+    "SELF_PLAY_ITERATIONS" : 500,
     "PARALLEL_PROCESS" : 100,
-    "EPOCHS" : 6,
+    "EPOCHS" : 4,
     "BATCH_SIZE" : 128,
     "MODEL_CHECK_GAMES" : 25,
     "WIN_RATIO_FOR_SAVING": 0.5,
-    
 }
 
 

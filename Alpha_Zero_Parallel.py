@@ -37,7 +37,7 @@ class Alpha_Zero:
         return_memory = []
         player = 1
         spGames = [SPG(self.game) for _ in range(self.args["PARALLEL_PROCESS"])]
-        
+
         while len(spGames) > 0:
             states = np.stack([spg.state for spg in spGames])
             neutral_states = self.game.change_perspective(states, player) if self.args["ADVERSARIAL"] else states
@@ -56,9 +56,8 @@ class Alpha_Zero:
                 spg.memory.append((spg.root.state, prob, player))
 
                 temp_prob = prob ** (1 / self.args["TEMPERATURE"])
-                
                 temp_prob /= np.sum(temp_prob)
-
+                
                 move = np.random.choice(self.game.possible_state, p = temp_prob)
         
                 spg.state = self.game.make_move(spg.state, move, player)
@@ -111,8 +110,8 @@ class Alpha_Zero:
         
     def learn(self):
         try:
-            model_path = os.path.join(self.args["MODEL_PATH"], 'model_9_128.pt')
-            optimizer_path = os.path.join(self.args["MODEL_PATH"], 'optimizer_9_128.pt')
+            model_path = os.path.join(self.args["MODEL_PATH"], 'model01.pt')
+            optimizer_path = os.path.join(self.args["MODEL_PATH"], 'optimizer01.pt')
 
             self.model.load_state_dict(torch.load(model_path))
             self.optimizer.load_state_dict(torch.load(optimizer_path))
@@ -123,11 +122,8 @@ class Alpha_Zero:
         else:
             print(Colors.GREEN + "MODEL FOUND\nLOADING MODEL..." + Colors.RESET)
         finally:
-
-            
+            initial_model = copy.copy(self.model)
             for iteration in range(self.args["NO_ITERATIONS"]):
-                initial_model = copy.copy(self.model)
-
                 memory = []
     
                 print(Colors.BLUE + "\nIteration no: " , iteration + 1, Colors.RESET)
@@ -141,27 +137,26 @@ class Alpha_Zero:
                 self.model.train()
                 for _ in trange(self.args["EPOCHS"]):
                     self.train(memory)
-                
+                    
                 print(Colors.YELLOW + "Testing..." + Colors.RESET)
                 self.model.eval()
                 initial_model.eval()
                 wins, draws, defeats = Arena(self.game, self.args, self.model, initial_model)
-
+    
                 print(Colors.GREEN + "Testing Completed" + Colors.WHITE + "\nTrained Model Stats:")
                 print(Colors.GREEN, "Wins: ", wins, Colors.RESET, "|", Colors.RED, "Loss: ", defeats, Colors.RESET, "|", Colors.WHITE," Draw: ", draws, Colors.RESET)
-
+    
                 if ((wins) / self.args["MODEL_CHECK_GAMES"]) <= self.args["WIN_RATIO_FOR_SAVING"]:
                     print(Colors.RED, "Rejecting New Model", Colors.RESET)
                     self.model = initial_model
                 else:
                     print(Colors.GREEN, "Accepting New Model", Colors.RESET)
-                                     
-                print(Colors.YELLOW + "Saving Model...")
-                torch.save(self.model.state_dict(), os.path.join(self.args["MODEL_PATH"], "model_9_128.pt"))
-                torch.save(self.optimizer.state_dict(), os.path.join(self.args["MODEL_PATH"], "optimizer_9_128.pt"))
-                print("Saved!" + Colors.RESET)
-            
-            
+                                        
+                    print(Colors.YELLOW + "Saving Model...")
+                    torch.save(self.model.state_dict(), os.path.join(self.args["MODEL_PATH"], "model01.pt"))
+                    torch.save(self.optimizer.state_dict(), os.path.join(self.args["MODEL_PATH"], "optimizer01.pt"))
+                    print("Saved!" + Colors.RESET)
+                
 class SPG:
     def __init__(self, game):
         self.state = game.initialise_state()
