@@ -1,9 +1,9 @@
-import shelve
 import os
+import shelve
+
 import torch
 
 from tqdm import trange
-
 from Alpha_Zero_Parallel import Alpha_Zero
 from Games.ConnectFour.ConnectFour import ConnectFour
 from Games.ConnectFour.ConnectFourNN import ResNet

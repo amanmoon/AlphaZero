@@ -1,7 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
-
 class ResNet(nn.Module):
     def __init__(self, game, num_resBlocks, num_hidden, device):
         super().__init__()
@@ -12,13 +11,13 @@ class ResNet(nn.Module):
             nn.ReLU(),
             nn.Conv2d(3, num_hidden, kernel_size=3, padding=1),
             nn.BatchNorm2d(num_hidden),
-            nn.ReLU()            
+            nn.ReLU()
         )
-        
+
         self.backBone = nn.ModuleList(
             [ResBlock(num_hidden) for i in range(num_resBlocks)]
         )
-        
+
         self.policyHead = nn.Sequential(
             nn.Conv2d(num_hidden, 128, kernel_size=3, padding=1),
             nn.BatchNorm2d(128),
@@ -26,7 +25,7 @@ class ResNet(nn.Module):
             nn.Flatten(),
             nn.Linear(128 * game.row * game.col, game.possible_state)
         )
-        
+
         self.valueHead = nn.Sequential(
             nn.Conv2d(num_hidden, 3, kernel_size=3, padding=1),
             nn.BatchNorm2d(3),
@@ -35,9 +34,9 @@ class ResNet(nn.Module):
             nn.Linear(3 * game.row * game.col, 1),
             nn.Tanh()
         )
-        
+
         self.to(device)
-        
+
     def forward(self, x):
         x = self.startBlock(x)
         for resBlock in self.backBone:
@@ -45,8 +44,8 @@ class ResNet(nn.Module):
         policy = self.policyHead(x)
         value = self.valueHead(x)
         return policy, value
-        
-        
+
+
 class ResBlock(nn.Module):
     def __init__(self, num_hidden):
         super().__init__()
@@ -54,11 +53,11 @@ class ResBlock(nn.Module):
         self.bn1 = nn.BatchNorm2d(num_hidden)
         self.conv2 = nn.Conv2d(num_hidden, num_hidden, kernel_size=3, padding=1)
         self.bn2 = nn.BatchNorm2d(num_hidden)
-        
+
     def forward(self, x):
         residual = x
         x = F.relu(self.bn1(self.conv1(x)))
         x = self.bn2(self.conv2(x))
         x += residual
         x = F.relu(x)
-        return x 
+        return x

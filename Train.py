@@ -1,10 +1,9 @@
+import os
+import torch
+
 from Games.ConnectFour.ConnectFour import ConnectFour
 from Games.ConnectFour.ConnectFourNN import ResNet
 from Alpha_Zero_Parallel import Alpha_Zero
-
-import os
-
-import torch
 
 GAME = "ConnectFour"
 
